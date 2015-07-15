@@ -1,0 +1,28 @@
+ul, ol {
+	list-style-type: none;
+}
+
+.fa {
+	margin-right:7px;
+}
+
+.list-pdf li:before {    
+font-family: 'FontAwesome';
+content: '\f1c1';
+margin:0 10px 0 15px;
+}
+
+.menu-for-the-djs-container li:before {    
+font-family: 'FontAwesome';
+content: '\f0da';
+margin:0 10px 0 0;
+}
+
+.one_half h5 {
+	margin-bottom:0px;
+	font-size:16px;
+}
+
+.for-djs-menu {
+	font-size:1.2em;
+}

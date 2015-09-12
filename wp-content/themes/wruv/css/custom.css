@@ -7,15 +7,15 @@ ul, ol {
 }
 
 .list-pdf li:before {    
-font-family: 'FontAwesome';
-content: '\f1c1';
-margin:0 10px 0 15px;
+	font-family: 'FontAwesome';
+	content: '\f1c1';
+	margin:0 10px 0 15px;
 }
 
 .menu-for-the-djs-container li:before {    
-font-family: 'FontAwesome';
-content: '\f0da';
-margin:0 10px 0 0;
+	font-family: 'FontAwesome';
+	content: '\f0da';
+	margin:0 10px 0 0;
 }
 
 .one_half h5 {
@@ -26,3 +26,61 @@ margin:0 10px 0 0;
 .for-djs-menu {
 	font-size:1.2em;
 }
+/********* FOOTER STYLES *******/
+#footer {
+	background: rgba(0, 0, 0, .5) url("../images/bg-bot-5.png") no-repeat scroll;
+	background-size:contain;
+	background-position:0 100%;
+}
+
+/*WHAT MONICA ADDED*/
+
+@media(max-width:1021px){
+	.title-home h3 {
+	  	float: left !important;
+	  	padding: 22px;
+	  	padding-bottom: 0;
+	  	margin-bottom: -3px;
+	}
+	.ev1shr-col {
+  		margin: 0 !important;
+  		margin-left: 10px !important;
+  	}
+  	.adshr-col .home-width{
+  		background-color: rgb(255, 255, 255);
+  	}
+  	.footer-row.clearfix .footer-col .footer-logo img {
+	  display: block;
+	  width: 123px;
+	  height: auto;
+	  margin-right: 0px;
+	  margin: auto;
+	}
+	.adshr-col {
+	  margin: 22px !important;
+	}
+}
+
+@media screen and (max-width: 800px){
+	.footer-col {
+	  width: 43% !important;
+	}
+	.footer-row {
+	  padding: 56px;
+	}
+	.footer-bottom-copyright {
+	  padding: 15px !important;
+	}
+	.adshr-fix {
+	  margin: 0 !important;
+	}
+	div#text-15 .textwidget {
+	  padding: 15px;
+	  overflow: hidden;
+	  color: #1b1b1b;
+	  width: 42%;
+	}
+
+}
+
+

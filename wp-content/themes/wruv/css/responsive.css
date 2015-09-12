@@ -40,8 +40,7 @@
         font-size: 90%;
     }
     .sidebar-right {
-        width: 34%;
-        padding: 3%;
+        width: 30%;
         padding-top: 0;
     }
     img {
@@ -54,6 +53,12 @@
         height: 100%;
         margin: 0 auto;
     }
+    
+    .content-page {
+  width: 550px !important;
+  display: inline-block;
+  padding: 15px;
+}
     .flex-title-large {
         top: 0px;
         left: 0px;
@@ -208,14 +213,11 @@
         width: 96%;
         margin: 2%;
     }
-    .bl1page-col {
-        width: 96%;
-        padding: 2%;
-    }
     .bl2page {
-        width: 96%;
-        padding: 2%;
-    }
+  width: 66%;
+  padding: 2%;
+  float: left;
+}
     .bl2page-col {
         width: 96%;
         padding: 2%;
@@ -235,10 +237,16 @@
     }
     .col-left-media { float: none }
     .home-width {
-        width: 96%;
+        width: 92%;
         padding: 2%;
         float: left;
     }
+    .adshr-col, .vdshr-col, .phshr-col {
+  margin-bottom: 5px;
+  width: 564px;
+  padding: 15px 15px 0px 15px;
+  float: left;
+}
     .col-left-media .ev1page {
         width: 96%;
         padding: 2%;
@@ -688,11 +696,7 @@
     .bl1page-col {
         width: 96%;
         padding: 2%;
-    }
-    .bl2page {
-        width: 96%;
-        padding: 2%;
-    }
+    } 
     .bl2page-col {
         width: 96%;
         padding: 2%;
@@ -826,7 +830,7 @@
     }
     .evsng-week { width: 100% }
     .ev1shr-col,
-    .sidebar-right {
+     {
         width: 94% !important;
         margin: 2%;
         padding: 1%;
@@ -1022,6 +1026,13 @@
         height: 80px;
     }
 }
+
+@media (max-width:843px) {
+	.sidebar-right{
+		float: left;
+	}
+}
+
 
 @media (max-width:500px) { 
     .one_third,

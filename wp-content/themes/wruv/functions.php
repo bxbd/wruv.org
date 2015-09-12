@@ -1,4 +1,26 @@
 <?php
+
+add_action('wp', function() {
+    if( is_404() ) {
+        if( preg_match('/^\/fixgenre\//', $_SERVER["REQUEST_URI"] ) ) {
+            // echo preg_replace('/^\/invoice\/(.*)$/', 'client/invoices/$1', $_SERVER["REQUEST_URI"] );
+            header('Content-Type: text/plain');
+            $posts = get_posts( array(
+                'posts_per_page' => 5,
+                'offset' => 0,
+                'post_type' => 'reviews',
+            ));
+            var_export($posts);
+            exit();
+        }
+        // echo '404!';
+        //~ wp_redirect( home_url() );
+        //~ exit();
+        return;
+    }
+});
+
+
 /*** FUNCTIONS
  ****************************************************************/
 include('includes/functions-comment.php');
@@ -33,6 +55,7 @@ include('includes/widgets/widget-twitter.php');
  ****************************************************************/
 include('includes/shortcodes/shortcode.php');
 include('includes/shortcodes/shortcode-blog.php');
+include('includes/shortcodes/shortcode-review.php');
 include('includes/shortcodes/shortcode-audio.php');
 include('includes/shortcodes/shortcode-event.php');
 include('includes/shortcodes/shortcode-video.php');

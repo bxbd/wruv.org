@@ -2255,17 +2255,43 @@ span#player-meta-widget { display:none; }
  
  .tweets_list ul {
 	padding:15px;
+/* maybe this DISABLING TWEETS_LIST IMAGE OPTION should be done in the admin somewhere? */
+        list-style-image: none !important;
 	}
 
 .tweets_list li {
 	margin-top:15px;
+	margin-left: 40px;
 	}
 
  .tweets_list span {
         color:#fff;
         font-weight:bold;
+	/*text-shadow: 7px 3px 6px #f75c46;*/
+/*just an outline*/
+/*
+text-shadow: -1px -1px 0 #000,
+    1px -1px 0 #000,
+    -1px 1px 0 #000,
+    1px 1px 0 #000;  
+*/
+/*glowy*/
+  	text-shadow:-1px -1px 2px #000, 1px -1px 2px #f75c46, -1px 1px 2px #000, 1px 1px 2px #f75c46;
     }
 
+ .tweets_list li:before {
+	content: '\f001';/*fa-music*/
+	font-family: 'FontAwesome';
+	list-style-image: none;
+	text-shadow: 7px 3px 6px #f75c46;
+	margin-right: 10px;
+	font-size: 40px;
+	line-height: 5px;
+	vertical-align: bottom;
+	margin-left: -50px;
+	position: relative;
+	top: 5px;	
+  }
 .tweets_list li:first-child {
 	margin-top:0px;
 	}

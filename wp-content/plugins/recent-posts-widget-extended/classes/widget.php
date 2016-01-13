@@ -1,6 +1,6 @@
 <?php
 /**
- * The custom recent posts widget. 
+ * The custom recent posts widget.
  * This widget gives total control over the output to the user.
  *
  * @package    Recent_Posts_Widget_Extended
@@ -21,7 +21,7 @@ class Recent_Posts_Widget_Extended extends WP_Widget {
 		/* Set up the widget options. */
 		$widget_options = array(
 			'classname'   => 'rpwe_widget recent-posts-extended',
-			'description' => __( 'An advanced widget that gives you total control over the output of your site’s most recent Posts.', 'rpwe' )
+			'description' => __( 'An advanced widget that gives you total control over the output of your site’s most recent Posts.', 'recent-posts-widget-extended' )
 		);
 
 		$control_options = array(
@@ -30,11 +30,11 @@ class Recent_Posts_Widget_Extended extends WP_Widget {
 		);
 
 		/* Create the widget. */
-		$this->WP_Widget(
-			'rpwe_widget',                         // $this->id_base
-			__( 'Recent Posts Extended', 'rpwe' ), // $this->name
-			$widget_options,                       // $this->widget_options
-			$control_options                       // $this->control_options
+		parent::__construct(
+			'rpwe_widget',                                                 // $this->id_base
+			__( 'Recent Posts Extended', 'recent-posts-widget-extended' ), // $this->name
+			$widget_options,                                               // $this->widget_options
+			$control_options                                               // $this->control_options
 		);
 
 	}
@@ -79,7 +79,7 @@ class Recent_Posts_Widget_Extended extends WP_Widget {
 	 * @since 0.1
 	 */
 	function update( $new_instance, $old_instance ) {
-		
+
 		// Validate post_type submissions
 		$name = get_post_types( array( 'public' => true ), 'names' );
 		$types = array();
@@ -97,12 +97,13 @@ class Recent_Posts_Widget_Extended extends WP_Widget {
 		$instance['title_url']        = esc_url( $new_instance['title_url'] );
 
 		$instance['ignore_sticky']    = isset( $new_instance['ignore_sticky'] ) ? (bool) $new_instance['ignore_sticky'] : 0;
+		$instance['exclude_current']  = isset( $new_instance['exclude_current'] ) ? (bool) $new_instance['exclude_current'] : 0;
 		$instance['limit']            = (int)( $new_instance['limit'] );
 		$instance['offset']           = (int)( $new_instance['offset'] );
-		$instance['order']            = $new_instance['order'];
-		$instance['orderby']          = $new_instance['orderby'];
+		$instance['order']            = stripslashes( $new_instance['order'] );
+		$instance['orderby']          = stripslashes( $new_instance['orderby'] );
 		$instance['post_type']        = $types;
-		$instance['post_status']      = esc_attr( $new_instance['post_status'] );
+		$instance['post_status']      = stripslashes( $new_instance['post_status'] );
 		$instance['cat']              = $new_instance['cat'];
 		$instance['tag']              = $new_instance['tag'];
 		$instance['taxonomy']         = esc_attr( $new_instance['taxonomy'] );
@@ -111,8 +112,10 @@ class Recent_Posts_Widget_Extended extends WP_Widget {
 		$instance['length']           = (int)( $new_instance['length'] );
 		$instance['date']             = isset( $new_instance['date'] ) ? (bool) $new_instance['date'] : false;
 		$instance['date_relative']    = isset( $new_instance['date_relative'] ) ? (bool) $new_instance['date_relative'] : false;
+		$instance['date_modified']    = isset( $new_instance['date_modified'] ) ? (bool) $new_instance['date_modified'] : false;
 		$instance['readmore']         = isset( $new_instance['readmore'] ) ? (bool) $new_instance['readmore'] : false;
 		$instance['readmore_text']    = strip_tags( $new_instance['readmore_text'] );
+		$instance['comment_count']    = isset( $new_instance['comment_count'] ) ? (bool) $new_instance['comment_count'] : false;
 
 		$instance['thumb']            = isset( $new_instance['thumb'] ) ? (bool) $new_instance['thumb'] : false;
 		$instance['thumb_height']     = (int)( $new_instance['thumb_height'] );
@@ -124,8 +127,8 @@ class Recent_Posts_Widget_Extended extends WP_Widget {
 		$instance['cssID']            = sanitize_html_class( $new_instance['cssID'] );
 		$instance['css_class']        = sanitize_html_class( $new_instance['css_class'] );
 		$instance['css']              = $new_instance['css'];
-		$instance['before']           = stripslashes( $new_instance['before'] );
-		$instance['after']            = stripslashes( $new_instance['after'] );
+		$instance['before']           = wp_kses_post( $new_instance['before'] );
+		$instance['after']            = wp_kses_post( $new_instance['after'] );
 
 		return $instance;
 

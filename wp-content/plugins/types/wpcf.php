@@ -1,18 +1,14 @@
 <?php
 /*
-  Plugin Name: Types - Complete Solution for Custom Fields and Types
+  Plugin Name: Types
   Plugin URI: http://wordpress.org/extend/plugins/types/
-  Description: Define custom post types, custom taxonomy and custom fields.
+  Description: Define custom post types, custom taxonomies and custom fields.
   Author: OnTheGoSystems
   Author URI: http://www.onthegosystems.com
-  Version: 1.6.5.1
+  Version: 1.8.11
  */
 /**
  *
- * $HeadURL: http://plugins.svn.wordpress.org/types/tags/1.6.5.1/wpcf.php $
- * $LastChangedDate: 2015-02-24 10:05:51 +0000 (Tue, 24 Feb 2015) $
- * $LastChangedRevision: 1097977 $
- * $LastChangedBy: iworks $
  *
  */
 // Added check because of activation hook and theme embedded code
@@ -20,7 +16,7 @@ if ( !defined( 'WPCF_VERSION' ) ) {
     /**
      * make sure that WPCF_VERSION in embedded/bootstrap.php is the same!
      */
-    define( 'WPCF_VERSION', '1.6.5.1' );
+    define( 'WPCF_VERSION', '1.8.11' );
 }
 
 define( 'WPCF_REPOSITORY', 'http://api.wp-types.com/' );
@@ -33,12 +29,19 @@ define( 'WPCF_RES_ABSPATH', WPCF_ABSPATH . '/resources' );
 define( 'WPCF_RES_RELPATH', WPCF_RELPATH . '/resources' );
 
 // Add installer
-include dirname( __FILE__ ) . '/plus/installer/loader.php';
-WP_Installer_Setup($wp_installer_instance,
-array(
-    'plugins_install_tab' => '1',
-    'repositories_include' => array('toolset', 'wpml')
-));
+$installer = dirname( __FILE__ ) . '/plus/installer/loader.php';
+if ( file_exists($installer) ) {
+    include_once $installer;
+    if ( function_exists('WP_Installer_Setup') ) {
+        WP_Installer_Setup(
+            $wp_installer_instance,
+            array(
+                'plugins_install_tab' => '1',
+                'repositories_include' => array('toolset', 'wpml')
+            )
+        );
+    }
+}
 
 require_once WPCF_INC_ABSPATH . '/constants.php';
 /*
@@ -142,14 +145,18 @@ function wpcf_wp_init()
         //Add submenu Installer to Types
         function setup_installer()
         {
-            wpcf_admin_add_submenu_page(
-                array(
-                    'page_title' => __('Installer', 'wpcf'),
-                    'menu_title' => __('Installer', 'wpcf'),
-                    'menu_slug' => 'installer',
-                    'function' => 'installer_content'
-                )
-            );
+            if (
+                isset( $_GET['page'] ) 
+                && 'installer' == $_GET['page']
+            ) {
+                wpcf_admin_add_submenu_page(
+                    array(
+                        'menu_title' => __('Installer', 'wpcf'),
+                        'menu_slug' => 'installer',
+                        'function' => 'installer_content'
+                    )
+                );
+            }
         }
     }
 }
@@ -169,8 +176,12 @@ function wpcf_is_reserved_name($name, $context, $check_pages = true)
      */
     if ( $check_pages && !empty( $name ) ) {
         global $wpdb;
-        $page = $wpdb->get_var( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE post_name = %s AND post_type='page'",
-                        sanitize_title( $name ) ) );
+        $page = $wpdb->get_var(
+            $wpdb->prepare(
+                "SELECT ID FROM $wpdb->posts WHERE post_name = %s AND post_type='page'",
+                sanitize_title( $name )
+            )
+        );
         if ( !empty( $page ) ) {
             return new WP_Error( 'wpcf_reserved_name', __( 'You cannot use this slug because there is already a page by that name. Please choose a different slug.',
                                     'wpcf' ) );
@@ -178,7 +189,7 @@ function wpcf_is_reserved_name($name, $context, $check_pages = true)
     }
 
     // Add custom types
-    $custom_types = (array) get_option( 'wpcf-custom-types', array() );
+    $custom_types = get_option(WPCF_OPTION_NAME_CUSTOM_TYPES, array() );
     $post_types = get_post_types();
     if ( !empty( $custom_types ) ) {
         $custom_types = array_keys( $custom_types );
@@ -191,7 +202,7 @@ function wpcf_is_reserved_name($name, $context, $check_pages = true)
     }
 
     // Add taxonomies
-    $custom_taxonomies = (array) get_option( 'wpcf-custom-taxonomies', array() );
+    $custom_taxonomies = (array) get_option( WPCF_OPTION_NAME_CUSTOM_TAXONOMIES, array() );
     $taxonomies = get_taxonomies();
     if ( !empty( $custom_taxonomies ) ) {
         $custom_taxonomies = array_keys( $custom_taxonomies );
@@ -219,6 +230,7 @@ function wpcf_is_reserved_name($name, $context, $check_pages = true)
 function wpcf_reserved_names()
 {
     $reserved = array(
+        'action',
         'attachment',
         'attachment_id',
         'author',
@@ -228,8 +240,8 @@ function wpcf_reserved_names()
         'category',
         'category__and',
         'category__in',
-        'category__not_in',
         'category_name',
+        'category__not_in',
         'comments_per_page',
         'comments_popup',
         'cpage',
@@ -238,11 +250,15 @@ function wpcf_reserved_names()
         'error',
         'exact',
         'feed',
+        'field',
+        'fields',
         'format',
         'hour',
+        'lang',
         'link_category',
         'm',
         'minute',
+        'mode',
         'monthnum',
         'more',
         'name',
@@ -253,22 +269,23 @@ function wpcf_reserved_names()
         'orderby',
         'p',
         'page',
-        'page_id',
         'paged',
+        'page_id',
         'pagename',
+        'parent',
         'pb',
         'perm',
         'post',
-        'post__in',
-        'post__not_in',
         'post_format',
+        'post__in',
         'post_mime_type',
-        'post_status',
-        'post_tag',
-        'post_type',
+        'post__not_in',
         'posts',
         'posts_per_archive_page',
         'posts_per_page',
+        'post_status',
+        'post_tag',
+        'post_type',
         'preview',
         'robots',
         's',
@@ -281,9 +298,9 @@ function wpcf_reserved_names()
         'subpost_id',
         'tag',
         'tag__and',
+        'tag_id',
         'tag__in',
         'tag__not_in',
-        'tag_id',
         'tag_slug__and',
         'tag_slug__in',
         'taxonomy',
@@ -294,10 +311,6 @@ function wpcf_reserved_names()
         'withcomments',
         'withoutcomments',
         'year',
-        'lang',
-//        'comments',
-//        'blog',
-//        'files'
     );
 
     return apply_filters( 'wpcf_reserved_names', $reserved );

@@ -10,7 +10,7 @@ class GF_Field_Phone extends GF_Field {
 	public $type = 'phone';
 
 	public function get_form_editor_field_title() {
-		return __( 'Phone', 'gravityforms' );
+		return esc_attr__( 'Phone', 'gravityforms' );
 	}
 
 	function get_form_editor_field_settings() {
@@ -33,7 +33,7 @@ class GF_Field_Phone extends GF_Field {
 		);
 	}
 
-	public function is_conditional_logic_supported(){
+	public function is_conditional_logic_supported() {
 		return true;
 	}
 
@@ -47,7 +47,20 @@ class GF_Field_Phone extends GF_Field {
 		}
 	}
 
+	/**
+	 * Returns the field input.
+	 *
+	 * @param array $form
+	 * @param string $value
+	 * @param null|array $entry
+	 *
+	 * @return string
+	 */
 	public function get_field_input( $form, $value = '', $entry = null ) {
+
+		if ( is_array( $value ) ) {
+			$value = '';
+		}
 
 		$is_entry_detail = $this->is_entry_detail();
 		$is_form_editor  = $this->is_form_editor();
@@ -61,7 +74,7 @@ class GF_Field_Phone extends GF_Field {
 		$class_suffix  = $is_entry_detail ? '_admin' : '';
 		$class         = $size . $class_suffix;
 
-		$instruction           = $this->phoneFormat == 'standard' ? __( 'Phone format:', 'gravityforms' ) . ' (###) ###-####' : '';
+		$instruction           = $this->phoneFormat == 'standard' ? esc_html__( 'Phone format:', 'gravityforms' ) . ' (###) ###-####' : '';
 		$instruction_div       = $this->failed_validation && ! empty( $instruction ) ? "<div class='instruction validation_message'>$instruction</div>" : '';
 		$html_input_type       = RGFormsModel::is_html5_enabled() ? 'tel' : 'text';
 		$logic_event           = $this->get_conditional_logic_event( 'keyup' );
@@ -69,11 +82,25 @@ class GF_Field_Phone extends GF_Field {
 
 		$tabindex = $this->get_tabindex();
 
-		return sprintf( "<div class='ginput_container'><input name='input_%d' id='%s' type='{$html_input_type}' value='%s' class='%s' {$tabindex} {$logic_event} {$placeholder_attribute} %s/>{$instruction_div}</div>", $id, $field_id, esc_attr( $value ), esc_attr( $class ), $disabled_text );
+		return sprintf( "<div class='ginput_container ginput_container_phone'><input name='input_%d' id='%s' type='{$html_input_type}' value='%s' class='%s' {$tabindex} {$logic_event} {$placeholder_attribute} %s/>{$instruction_div}</div>", $id, $field_id, esc_attr( $value ), esc_attr( $class ), $disabled_text );
 
 	}
 
+	public function get_value_submission( $field_values, $get_from_post_global_var = true ) {
+
+		$value = parent::get_value_submission( $field_values, $get_from_post_global_var );
+		$value = $this->sanitize_entry_value( $value, $this->formId );
+
+		return $value;
+	}
+
+	public function sanitize_entry_value( $value, $form_id ) {
+		$value = is_array( $value ) ? '' : sanitize_text_field( $value );
+		return $value;
+	}
+
 	public function get_value_save_entry( $value, $form, $input_name, $lead_id, $lead ) {
+		$value = $this->sanitize_entry_value( $value, $form['id'] );
 
 		if ( $this->phoneFormat == 'standard' && preg_match( '/^\D?(\d{3})\D?\D?(\d{3})\D?(\d{4})$/', $value, $matches ) ) {
 			$value = sprintf( '(%s) %s-%s', $matches[1], $matches[2], $matches[3] );
@@ -84,11 +111,20 @@ class GF_Field_Phone extends GF_Field {
 
 	public function get_form_inline_script_on_page_render( $form ) {
 		$script = '';
-		if ( $this->phoneFormat == 'standard' ){
-			$script = "jQuery('#input_{$form['id']}_{$this->id}').mask('(999) 999-9999').bind('keypress', function(e){if(e.which == 13){jQuery(this).blur();} } );";
+		if ( $this->phoneFormat == 'standard' ) {
+			$script = "if(!/(android)/i.test(navigator.userAgent)){jQuery('#input_{$form['id']}_{$this->id}').mask('(999) 999-9999').bind('keypress', function(e){if(e.which == 13){jQuery(this).blur();} } );}";
 		}
 		return $script;
 	}
+
+	public function sanitize_settings() {
+		parent::sanitize_settings();
+
+		if ( $this->phoneFormat && ! in_array( $this->phoneFormat, array( 'standard', 'international' ) ) ) {
+			$this->phoneFormat = 'standard';
+		}
+	}
+
 
 }
 

@@ -35,9 +35,34 @@ class CatList{
     if ( $this->utils->lcp_not_empty('instance') ){
       $this->instance = $atts['instance'];
     }
-    //Get the category posts:
+  }
+
+  /**
+   * Determine the categories of posts and execute the WP_query
+   */
+  public function get_posts() {
     $this->get_lcp_category();
     $this->set_lcp_parameters();
+  }
+
+  /**
+   * Save the existing wp_query
+   */
+  public function save_wp_query() {
+    global $wp_query;
+    if ( isset($wp_query) ) {
+      $this->saved_wp_query = clone $wp_query;
+    }
+  }
+
+  /**
+   * Restore the previous wp_query
+   */
+  public function restore_wp_query() {
+    global $wp_query;
+    if ( isset($this->saved_wp_query) ) {
+      $wp_query = clone $this->saved_wp_query;
+    }
   }
 
   /**
@@ -53,9 +78,9 @@ class CatList{
     // http://core.trac.wordpress.org/browser/tags/3.7.1/src/wp-includes/post.php#L1686
     $args['posts_per_page'] = $args['numberposts'];
 
-    $query = new WP_Query;
-    $this->lcp_categories_posts = $query->query($args);
-    $this->posts_count = $query->found_posts;
+    query_posts($args);
+    global $wp_query;
+    $this->posts_count = $wp_query->found_posts;
     remove_all_filters('posts_orderby');
     remove_filter('posts_where', array( $this, 'starting_with'));
   }
@@ -71,7 +96,7 @@ class CatList{
 
   private function check_pagination($args){
     if ( $this->utils->lcp_not_empty('pagination') ){
-      if( null !== $_SERVER['QUERY_STRING'] ){
+      if( array_key_exists('QUERY_STRING', $_SERVER) && null !== $_SERVER['QUERY_STRING'] ){
         $query = $_SERVER['QUERY_STRING'];
         if ($query !== '' && preg_match('/lcp_page' . preg_quote($this->instance) .
                                         '=([0-9]+)/i', $query, $match) ) {
@@ -92,6 +117,9 @@ class CatList{
     if ( is_array($this->lcp_category_id) ){
       return array('category__and' => $this->lcp_category_id);
     } else {
+      if($this->utils->lcp_not_empty('child_categories') && ($this->params['child_categories'] === ('no' || 'false') )){
+        return array('category__in'=> $this->lcp_category_id);
+      }
       return array('cat'=> $this->lcp_category_id);
     }
   }
@@ -119,7 +147,8 @@ class CatList{
   }
 
   public function get_categories_posts(){
-    return $this->lcp_categories_posts;
+    global $wp_query;
+    return $wp_query->get_posts();
   }
 
   /**
@@ -156,8 +185,9 @@ class CatList{
         if ($this->params['catlink'] == 'yes'){
           $cat_string = '<a href="' . $cat_link . '" title="' . $cat_title . '">' .
                       $cat_string .
-                      $this->get_category_count($lcp_id) .  '</a>';
+                      $this->get_category_count() .  '</a>';
         }
+
         array_push($link, $cat_string);
       }
       return implode(", ", $link);
@@ -181,48 +211,56 @@ class CatList{
 
 
 
-  public function get_category_count($id){
+  public function get_category_count(){
     if($this->utils->lcp_not_empty('category_count') && $this->params['category_count'] == 'yes'):
-      return ' (' . get_category($id)->category_count . ')';
+      return ' ' . get_category($this->lcp_category_id)->category_count;
+    endif;
+  }
+
+  public function get_category_description(){
+    if ($this->utils->lcp_not_empty('category_description') && $this->params['category_description'] == 'yes'){
+      return '<p>' . category_description( $this->lcp_category_id) . '</p>';
+    }
+  }
+  public function get_conditional_title(){
+    if($this->utils->lcp_not_empty('conditional_title') && $this->get_posts_count() > 0):
+      return trim($this->params['conditional_title']);
     endif;
   }
 
   /**
-   * Display custom fields.
+   * Array of custom fields.
    * @see http://codex.wordpress.org/Function_Reference/get_post_custom
    * @param string $custom_key
    * @param int $post_id
    */
   public function get_custom_fields($custom_key, $post_id){
-    if( $this->utils->lcp_not_empty('customfield_display') &&
-    ( $this->params['customfield_display'] != '') ):
-      $lcp_customs = '';
+    if ( $this->utils->lcp_not_empty( 'customfield_display' ) ) :
+      $lcp_customs = array();
 
-    //Doesn't work for many custom fields when having spaces:
-    $custom_key = trim($custom_key);
+      //Doesn't work for many custom fields when having spaces:
+      $custom_key = trim( $custom_key );
 
-    //Create array for many fields:
-    $custom_array = explode(",", $custom_key);
+      //Create array for many fields:
+      $custom_array = explode( ',', $custom_key );
 
-    //Get post custom fields:
-    $custom_fields = get_post_custom($post_id);
+      //Get post custom fields:
+      $custom_fields = get_post_custom( $post_id );
 
-    //Loop on custom fields and if there's a value, add it:
-    foreach ($custom_array as $user_customfield) :
-    if(isset($custom_fields[$user_customfield])):
-      $my_custom_field = $custom_fields[$user_customfield];
+      //Loop on custom fields and if there's a value, add it:
+      foreach ( $custom_array as $user_customfield ) :
+        // Check that the custom field is wanted:
+        if ( isset( $custom_fields[$user_customfield] ) ) :
+          //Browse through the custom field values:
+          foreach ( $custom_fields[$user_customfield] as $key => $value ) :
+            if ( $this->params['customfield_display_name'] != 'no' )
+              $value = $user_customfield . $this->params['customfield_display_name_glue'] . $value;
+            $lcp_customs[] = $value;
+          endforeach;
+        endif;
+      endforeach;
 
-    if (sizeof($my_custom_field) > 0 ):
-      foreach ( $my_custom_field as $key => $value ) :
-      if ($this->params['customfield_display_name'] != "no")
-        $lcp_customs .= $user_customfield . " : ";
-    $lcp_customs .= $value;
-    endforeach;
-    endif;
-    endif;
-    endforeach;
-
-    return $lcp_customs;
+      return $lcp_customs;
     else:
       return null;
     endif;
@@ -317,22 +355,29 @@ class CatList{
   }
 
   public function get_excerpt($single){
-    if ( !empty($this->params['excerpt']) && $this->params['excerpt']=='yes'){
+    if ( !empty( $this->params['excerpt'] ) &&
+         ( $this->params['excerpt']=='yes' || $this->params['excerpt']=='full') ){
 
-      if($single->post_excerpt == ("")){
-        //No excerpt, generate one:
-        $lcp_excerpt = $this->lcp_trim_excerpt($single->post_content);
+      if( $single->post_excerpt == "" ||
+         ( !empty($this->params['excerpt_overwrite']) && $this->params['excerpt_overwrite'] == 'yes' ) ){
+        // No explicit excerpt or excerpt_overwrite=yes, so generate from content:
+        $lcp_content = $single->post_content;
+        // <!--more--> tag?
+        if( $this->params['excerpt']=='full' &&
+          preg_match('/[\S\s]+(<!--more(.*?)?-->)[\S\s]+/', $lcp_content, $matches) ) {
+          $lcp_excerpt = explode($matches[1], $lcp_content);
+          $lcp_excerpt = $lcp_excerpt[0];
+        }else{
+          $lcp_excerpt = $this->lcp_trim_excerpt($lcp_content);
+        }
       }else{
-        if(!empty($this->params['excerpt_overwrite']) &&
-        $this->params['excerpt_overwrite'] == 'yes'){
-          // Excerpt but we want to overwrite it:";
-          $lcp_excerpt = $this->lcp_trim_excerpt($single->post_content);
+        // Explicit excerpt and excerpt_overwrite=no:
+        if( $this->params['excerpt']=='full' ){
+          $lcp_excerpt = $single->post_excerpt;
         } else {
-          // Bring post excerpt;
           $lcp_excerpt = $this->lcp_trim_excerpt($single->post_excerpt);
         }
       }
-
       if( strlen($lcp_excerpt) < 1 ){
         $lcp_excerpt = $single->post_title;
       }
@@ -362,10 +407,16 @@ class CatList{
   }
 
   public function get_thumbnail($single, $lcp_thumb_class = null){
+    if ($this->utils->lcp_not_empty('force_thumbnail')){
+      $force_thumbnail = $this->params['force_thumbnail'];
+    } else {
+      $force_thumbnail = 'no';
+    }
     return LcpThumbnail::get_instance()->get_thumbnail(
       $single,
       $this->params['thumbnail'],
       $this->params['thumbnail_size'],
+      $force_thumbnail,
       $lcp_thumb_class);
   }
 

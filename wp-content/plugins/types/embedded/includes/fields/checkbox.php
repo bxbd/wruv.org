@@ -1,10 +1,6 @@
 <?php
 /**
  *
- * $HeadURL: http://plugins.svn.wordpress.org/types/tags/1.6.5.1/embedded/includes/fields/checkbox.php $
- * $LastChangedDate: 2014-11-18 06:47:25 +0000 (Tue, 18 Nov 2014) $
- * $LastChangedRevision: 1027712 $
- * $LastChangedBy: iworks $
  *
  */
 
@@ -31,6 +27,8 @@ function wpcf_fields_checkbox()
  * Form data for post edit page.
  *
  * @param type $field
+ *
+ * @deprecated seems
  */
 function wpcf_fields_checkbox_meta_box_form($field, $field_object)
 {
@@ -92,8 +90,8 @@ function wpcf_fields_checkbox_editor_callback($field, $settings)
         'supports' => array('style'),
         'tabs' => array(
             'display' => array(
-                'menu_title' => __( 'Display', 'wpcf' ),
-                'title' => __( 'Display', 'wpcf' ),
+                'menu_title' => __( 'Display options', 'wpcf' ),
+                'title' => __( 'Display options for this field:', 'wpcf' ),
                 'content' => WPCF_Loader::template( 'editor-modal-checkbox',
                         $data ),
             )
@@ -198,17 +196,26 @@ function wpcf_fields_checkbox_view($params)
         $output = $params['field_value'];
         // Show the translated value if we have one.
         $field = wpcf_fields_get_field_by_slug( $params['field']['slug'], $option_name );
+		// We need to translate here because the stored value is on the original language
+		// When updaing the value in the Field group, we might have problems
+		// @wpmlhere
         $output = wpcf_translate( 'field ' . $field['id'] . ' checkbox value', $output );
     } elseif ( $params['field']['data']['display'] == 'value'
             && $params['field_value'] != '' ) {
         if ( !empty( $params['field']['data']['display_value_selected'] ) ) {
             $output = $params['field']['data']['display_value_selected'];
+			// We need to translate here because the stored value is on the original language
+			// When updaing the value in the Field group, we might have problems
+			// @wpmlhere
             $output = wpcf_translate( 'field ' . $params['field']['id'] . ' checkbox value selected',
                     $output );
         }
     } elseif ( $params['field']['data']['display'] == 'value'
         && !empty( $params['field']['data']['display_value_not_selected'] ) ) {
         $output = $params['field']['data']['display_value_not_selected'];
+		// We need to translate here because the stored value is on the original language
+		// When updaing the value in the Field group, we might have problems
+		// @wpmlhere
         $output = wpcf_translate( 'field ' . $params['field']['id'] . ' checkbox value not selected', $output );
     } else {
         return '__wpcf_skip_empty';

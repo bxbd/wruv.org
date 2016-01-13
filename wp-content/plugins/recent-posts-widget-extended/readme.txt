@@ -1,9 +1,9 @@
 === Recent Posts Widget Extended ===
-Contributors: satrya, themejunkie
+Contributors: themejunkie, satrya
 Tags: recent posts, random posts, popular posts, thumbnails, widget, widgets, sidebar, excerpt, category, post tag, taxonomy, post type, post status, shortcode, multiple widgets
-Requires at least: 3.7
-Tested up to: 4.0.1
-Stable tag: 0.9.9
+Requires at least: 3.9
+Tested up to: 4.3.1
+Stable tag: 0.9.9.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -13,18 +13,15 @@ Provides flexible and advanced recent posts. Display it via shortcode or widget 
 
 This plugin will enable a custom, flexible and super advanced recent posts, you can display it via shortcode or widget. Allows you to display a list of the most recent posts with thumbnail, excerpt and post date, also you can display it from all or specific or multiple taxonomy, post type and much more!
 
-= New Features =
+= Features Include =
 
-* WordPress 4.0.1 Support.
+* WordPress 4.3.1 Support.
 * Shortcode feature. Please read [Other Notes](http://wordpress.org/plugins/recent-posts-widget-extended/other_notes)
 * Taxonomy support!
 * Post status option.
 * Custom html or text before and/or after recent posts.
-* Added some filter to allow dev to customize the plugin. Please read [FAQ](http://wordpress.org/plugins/recent-posts-widget-extended/faq).
+* Available filter for dev. Please read [FAQ](http://wordpress.org/plugins/recent-posts-widget-extended/faq).
 * Better image cropping.
-
-= Features Include =
-
 * Allow you to set title url.
 * Display by date, comment count or random.
 * Display thumbnails, with customizable size and alignment.
@@ -32,42 +29,28 @@ This plugin will enable a custom, flexible and super advanced recent posts, you 
 * Display from all, specific or multiple category.
 * Display from all, specific or multiple tag.
 * Display post date.
+* Display modification date
+* Display comment count
+* Exclude current post
 * Read more option.
 * Post type option.
 * Custom CSS.
 * Multiple widgets.
 
 = Language =
+
 * English
 * France
-* [Contribute to your language](https://github.com/satrya/recent-posts-widget-extended/issues)
-
-= Plugin Support =
-
-* [Get the Image](http://wordpress.org/plugins/get-the-image/).
-* [Page Builder by SiteOrigin](http://wordpress.org/plugins/siteorigin-panels/).
-* [Featured Video Plus](http://wordpress.org/plugins/featured-video-plus/).
+* Brazilian Portuguese
+* [Contribute to your language](https://github.com/themejunkie/recent-posts-widget-extended/issues)
 
 = Support =
 
-* Go to [forum support](http://wordpress.org/support/plugin/recent-posts-widget-extended).
+* [Forum support](http://wordpress.org/support/plugin/recent-posts-widget-extended).
 * [Rate/Review the plugin](http://wordpress.org/support/view/plugin-reviews/recent-posts-widget-extended).
-* Submit translation.
+* [Submit translation](https://github.com/themejunkie/recent-posts-widget-extended/issues).
 
-= Plugin Info =
-* Developed by [Satrya](http://satrya.me/) & [Theme Junkie](http://www.theme-junkie.com/)
-* Check out the [Github](https://github.com/satrya/recent-posts-widget-extended) repo to contribute.
-
-= Posts Plugin Series =
-* [Recent Posts Widget Extended](http://wordpress.org/plugins/recent-posts-widget-extended/)
-* [Advanced Random Posts Widget](http://wordpress.org/plugins/advanced-random-posts-widget/)
-
-= Contributors =
-* [David Kryzaniak](http://profiles.wordpress.org/davidkryzaniak/)
-* [AKbyte](http://profiles.wordpress.org/akbyte/)
-* [Alexander Sidorov](https://github.com/lkart)
-* [Rubens Mariuzzo](https://github.com/rmariuzzo)
-* [Ikart](https://github.com/lkart)
+> Developed by [Theme Junkie](http://www.theme-junkie.com/)
 
 == Installation ==
 
@@ -255,7 +238,24 @@ after=""
 
 == Changelog ==
 
-= 0.9.9 - 11/29/2014 = 
+= 0.9.9.4 - Nov 09, 2015 =
+- Sanitize `before` and `after` element for better security
+
+= 0.9.9.3 - 19/09/2015 =
+- Change text-domain to matches the plugin slug
+- **Add:** Exclude post option
+
+= 0.9.9.2 - 13/08/2015 =
+- **Add:** Brazilian portuguese translation. Props [Gil Barbara](https://github.com/gilbarbara)
+- **Add:** Option to show modification date. Props [kurt-hectic](https://github.com/kurt-hectic)
+- **Add:** Option to show comment count. Props [Oliver Larsen](https://github.com/CandyFace)
+- **Improve:** Add validation to the `Order` and `Orderby` option before saving the widget.
+
+= 0.9.9.1 - 12/07/2015 =
+- Prepare to support WordPress 4.3
+- **Update:** Limit the number of `tags` and `categories` displayed in the widget
+
+= 0.9.9 - 29/11/2014 =
 - **Fix:** for "cssID" attribute in shortcodes. Props [Ikart](https://github.com/lkart)
 - **Fix:** Thumbnail fallback uses `get_the_post_thumbnail`
 - **Add:** `rpwe-img` to the thumbnail.
@@ -263,11 +263,11 @@ after=""
 - **Improve:** Move `use styles default` option to above the custom css. I'm sorry for the incosistency.
 - **Update:** Language
 
-= 0.9.8 - 11/26/2014 = 
+= 0.9.8 - 26/11/2014 =
 * **Fix:** Compatibility issue with `Get The Image` plugin/extension.
 * **Fix:** Issue with `html or text before and after recent posts`, now it allow all HTML tags.
 
-= 0.9.7 - 9/13/2014  =
+= 0.9.7 - 13/09/2014 =
 * **Add:** Relative date option `eg: 4 days ago`. Props [George Venios](https://github.com/veniosg)
 * **Add:** [Featured Video Plus](http://wordpress.org/plugins/featured-video-plus/) plugin support.
 * **Add:** Hide widget if no posts exist.

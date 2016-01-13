@@ -96,14 +96,16 @@ function CreateConditionalLogic(objectType, obj){
     var anySelected = obj.conditionalLogic.logicType == "any" ? "selected='selected'" :"";
 
     var objText;
-    if(objectType == "field")
+    if (obj['type'] == "section")
+        objText = gf_vars.thisSectionIf;
+    else if(objectType == "field")
         objText = gf_vars.thisFieldIf;
     else if(objectType == "page")
         objText = gf_vars.thisPage;
     else if(objectType == "confirmation")
-        objText = gf_vars.thisConfirmation
+        objText = gf_vars.thisConfirmation;
     else if(objectType == "notification")
-        objText = gf_vars.thisNotification
+        objText = gf_vars.thisNotification;
     else
         objText = gf_vars.thisFormButton;
 
@@ -138,12 +140,12 @@ function CreateConditionalLogic(objectType, obj){
 }
 
 function GetRuleOperators( objectType, i, fieldId, selectedOperator ) {
-    var str, supportedOperators, operators, str, selected;
+    var str, supportedOperators, operators, selected;
     supportedOperators = {"is":"is","isnot":"isNot", ">":"greaterThan", "<":"lessThan", "contains":"contains", "starts_with":"startsWith", "ends_with":"endsWith"};
     str = "<select id='" + objectType + "_rule_operator_" + i + "' class='gfield_rule_select' onchange='SetRuleProperty(\"" + objectType + "\", " + i + ", \"operator\", jQuery(this).val());var valueSelector=\"#" + objectType + "_rule_value_" + i + "\"; jQuery(valueSelector).replaceWith(GetRuleValues(\"" + objectType + "\", " + i + ",\"" + fieldId + "\", \"\"));jQuery(valueSelector).change();'>";
     operators = IsEntryMeta(fieldId) ? GetOperatorsForMeta(supportedOperators, fieldId) : supportedOperators;
 
-    operators = gform.applyFilters( 'gform_conditional_logic_operators', operators, objectType, fieldId )
+    operators = gform.applyFilters( 'gform_conditional_logic_operators', operators, objectType, fieldId );
 
     jQuery.each(operators,function(operator, stringKey){
         selected = selectedOperator == operator ? "selected='selected'" : "";
@@ -190,16 +192,27 @@ function GetRuleFields( objectType, ruleIndex, selectedFieldId ) {
 
     options = gform.applyFilters( 'gform_conditional_logic_fields', options, form, selectedFieldId );
 
-    // create the actual <option> strings
+    str += GetRuleFieldsOptions( options, selectedFieldId );
+
+    str += "</select>";
+    return str;
+}
+
+function GetRuleFieldsOptions( options, selectedFieldId ){
+    var str = '';
     for( var i = 0; i < options.length; i++ ) {
 
         var option = options[i];
-        var selected = option.value == selectedFieldId ? "selected='selected'" : '';
+        if ( typeof option.options !== 'undefined' ) {
+            str += '<optgroup label=" ' + option.label + '">';
+            str += GetRuleFieldsOptions( option.options, selectedFieldId );
+            str += '</optgroup>';
+        } else {
+            var selected = option.value == selectedFieldId ? "selected='selected'" : '';
 
-        str += "<option value='" + option.value + "' " + selected + ">" + option.label + "</option>";
+            str += "<option value='" + option.value + "' " + selected + ">" + option.label + "</option>";
+        }
     }
-
-    str += "</select>";
     return str;
 }
 
@@ -717,6 +730,12 @@ function ConfirmationObj() {
         $("#gform-settings").submit();
     };
 
+    gaddon.duplicateFeed = function (id) {
+        $("#single_action").val("duplicate");
+        $("#single_action_argument").val(id);
+        $("#gform-settings").submit();
+    };
+
     function isValidJson(str) {
         try {
             JSON.parse(str);
@@ -1148,7 +1167,7 @@ var gfMergeTagsObj = function(form) {
                     continue;
 
                 var input = field.inputs[i];
-                if(inputType == "creditcard" && jQuery.inArray(input.id,[parseFloat(field.id + ".2"), parseFloat(field.id + ".3"), parseFloat(field.id + ".5")]) > -1)
+                if(inputType == "creditcard" && jQuery.inArray(parseFloat(input.id),[parseFloat(field.id + ".2"), parseFloat(field.id + ".3"), parseFloat(field.id + ".5")]) > -1)
                     continue;
                 label = GetLabel(field, input.id).replace("'", "\\'");
                 value = "{" + label + ":" + input.id + tagArgs + "}";

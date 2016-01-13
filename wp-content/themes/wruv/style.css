@@ -2254,9 +2254,8 @@ span#player-meta-widget { display:none; }
 /* --- twitter widget --- */
  
  .tweets_list ul {
+    background: url("./images/now-playing-bg.png") no-repeat;
 	padding:15px;
-/* maybe this DISABLING TWEETS_LIST IMAGE OPTION should be done in the admin somewhere? */
-        list-style-image: none !important;
 	}
 
 .tweets_list li {
@@ -2285,12 +2284,11 @@ text-shadow: -1px -1px 0 #000,
 	list-style-image: none;
 	text-shadow: 7px 3px 6px #f75c46;
 	margin-right: 10px;
-	font-size: 40px;
+	font-size: 25px;
 	line-height: 5px;
 	vertical-align: bottom;
-	margin-left: -50px;
-	position: relative;
-	top: 5px;	
+	margin-left: -53px;
+	position: relative;	
   }
 .tweets_list li:first-child {
 	margin-top:0px;

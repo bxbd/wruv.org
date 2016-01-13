@@ -1,3 +1,19 @@
+.title h3{
+    color: #000;
+    float: left;
+    font-size: 24px;
+    font-weight: 600;
+    line-height: 34px;
+    padding: 5px 0;
+    text-transform: uppercase;
+}
+.title a {
+     font-size:12px;
+}
+.title-home a {
+     font-size:12px;
+}
+
 ul, ol {
 	list-style-type: none;
 }

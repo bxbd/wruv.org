@@ -275,6 +275,25 @@ tr.alt { background-color: #f5f5f5 }
   margin:0 auto;
   box-sizing: border-box;
 }
+.header-meta {
+    background: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/252172/wruv-label-bottom.png),
+    url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/252172/wruv-label-top.png),
+    url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/252172/wruv-label-repeat.png);
+    background-repeat: no-repeat, no-repeat, repeat;
+    background-position: center bottom, center top, center 10px;
+    min-height: 100px;
+    background-size: 100%, 100%, 100%;
+    padding: 20px;
+    font-family: 'Covered By Your Grace', cursive;
+    font-size: 30px;
+}
+hr.drawn {
+  background-color: transparent;
+  border: 0;
+  background: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/252172/wruv-divider-line.png) no-repeat center center;
+  height: 15px;
+  width: 100%;
+}
 #header .fa {
   margin-right: 0;
 }
@@ -290,7 +309,7 @@ tr.alt { background-color: #f5f5f5 }
 .player-label {
   position: relative;
   color: #fff;
-  font-family: sans;
+  font-family: 'Tittillium Web', sans-serif;
   text-transform: uppercase;
   font-size: 12px;
   margin-top: 0;
@@ -307,7 +326,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a5a7a9', end
   border-radius: 8px;
 }
 .player-choice {
-  font-family: sans;
+  font-family: 'Tittillium Web', sans-serif;
   text-align: center;
 }
 .player-choice strong {
@@ -346,6 +365,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a5a7a9', end
   margin: 3px;
   display: block;
   text-decoration: none;
+  line-height: 100%;
 }
 #main-vu-meter {
   background: #FCFFD3;
@@ -404,21 +424,10 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a5a7a9', end
   background: #000;
 }
 
-.header-col-1, .header-col.col-1 {
-  width: 20%;
-}
-
 .header-col {
+  width: 100%;
   display: inline-block;
   vertical-align: top;
-}
-
-.header-col.col-2 {
-  width: 40%;
-}
-
-.header-col.col-3 {
-  width: 35%;
 }
 
 .tapeman-container {
@@ -429,6 +438,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a5a7a9', end
   padding-top: 11px;
   display: block;
   margin: 0 auto;
+  width: 75%;
 }
 
 #header hr {
@@ -463,7 +473,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#636466', end
 
 .tape-label {
   color: #fff;
-  font-family: Arial, sans;
+  font-family: 'Tittillium Web', sans-serif;
   text-align: center;
   display: inline-block;
   width: 15%;
@@ -4708,4 +4718,17 @@ clear: both;
 
 .rpwe-clearfix{
 zoom: 1;
+}
+
+@media screen and (min-width: 800px) {
+  .header-col-1, .header-col.col-1 {
+    width: 20%;
+  }
+  .header-col.col-2 {
+    width: 40%;
+  }
+
+  .header-col.col-3 {
+    width: 35%;
+  }
 }

@@ -64,6 +64,7 @@
 <!-- Wordpress functions -->
 <?php wp_head(); ?>
 <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+<link href='https://fonts.googleapis.com/css?family=Covered+By+Your+Grace' rel='stylesheet' type='text/css'>
 </head>
 
 
@@ -143,7 +144,10 @@ switch ($playerar) {
              <div id="main-vu-meter">
            <div class="needle" id="needle"></div>
          </div>
-         <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/252172/wruv-sample-title.png" style="width:100%;">
+         <div class="header-meta">
+           DJ Name<br><hr class="drawn">
+           Show Title<br>
+         </div>
          <hr>
          <div id="bar-vu-meter">
            <div class="inner">

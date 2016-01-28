@@ -120,7 +120,37 @@ switch ($playerar) {
        </div>
        <div class="header-col col-2">
          <div class="tapeman-container">
-         <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/252172/wruv-tapeman.png">
+           <div id="tapeman-chat" class="big-chat">
+             <div id="chat_login_pane">
+                <form name="loginForm" onsubmit="return false;" action="#">
+                   <input type="image" class="chat_button" src="/img/chat/login.gif" title="Connect!" onclick="doChatLogin(this.form)">
+                </form>
+             </div>
+
+             <div id="chat_sendmsg_pane" class="big-chat" style="display:none;">
+                <form name="sendForm" onsubmit="return false" action="#">
+                <div id="chat_dialog" class="big-chat"></div>
+                <table>
+                   <tbody><tr>
+                      <td width="16">
+                         <input type="image" class="chat_button" src="/img/chat/send.gif" title="Send" onclick="sendMsg(this.form)">
+                      </td>
+                      <td width="16">
+                         <a href="#" onclick="return doChatLogout();"><img border="0" style="margin-top: 1px;" class="chat_button" src="/img/chat/logout.gif" title="Logout"></a>
+
+                      </td>
+
+                      <td nowrap="1">
+                         <small>Enter message:</small>
+                      </td>
+                      <td width="100%">
+                         <input type="text" name="msg" id="chat_sendmsg" class="big-chat" onkeyup="chat_box_keyevent(event, sendMsg);">
+                      </td>
+                   </tr>
+                </tbody></table>
+                </form>
+             </div>
+        </div>
            <div class="tapedeck-controls">
              <span class="tape-label" id="chat-label">
                Chat With The DJ</span>
@@ -131,7 +161,7 @@ switch ($playerar) {
                              <span class="tape-label">
                Stop</span>
              <div class="inner">
-               <a href="#" class="tape-button" id="chat-button"><i class="fa fa-comment-o"></i></a>
+               <a href="#" class="tape-button" id="chat-button" onclick="doChatLogin(document.forms.loginForm); return false;"><i class="fa fa-comment-o"></i></a>
                <a href="#" class="tape-button"><i class="fa fa-external-link"></i></a>
                <a href="#" class="tape-button"><i class="fa fa-play"></i></a>
                <a href="#" class="tape-button"><i class="fa fa-stop"></i></a>

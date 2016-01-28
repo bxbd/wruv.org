@@ -70,6 +70,7 @@ add_action('wp_enqueue_scripts', 'wizedesign_load_javascript');
 add_action('init', 'loadSetupReference');
 add_action('admin_head', 'wize_load_adminscripts');
 function wizedesign_load_javascript() {
+  wp_enqueue_script( 'jquery-ui', 'https://code.jquery.com/ui/1.11.4/jquery-ui.min.js', array( 'jquery' ) );
 	wp_enqueue_script('flexslider', get_template_directory_uri() . '/js/flexslider.js', array( 'jquery' ), false, true );
     wp_enqueue_script('fullwidthAudioPlayer', get_template_directory_uri() . '/js/fullwidthAudioPlayer.js', array( 'jquery' ), false, true );
 	wp_enqueue_script('jPlayerRadio', get_template_directory_uri() . '/js/jPlayerRadio.js', array( 'jquery' ), false, true );
@@ -83,8 +84,9 @@ function wizedesign_load_javascript() {
 	wp_enqueue_script('selectnav', get_template_directory_uri() . '/js/selectnav.js', array('jquery'), false, true );
 	wp_enqueue_script('respond', get_template_directory_uri() . '/js/respond.js', array('jquery'), false, true );
 	wp_enqueue_script('script', get_template_directory_uri() . '/js/script.js', array('jquery'), false, true );
-    wp_enqueue_script('map', 'http://maps.googleapis.com/maps/api/js?sensor=false', array('jquery'), false, true );	
-		
+    wp_enqueue_script('map', 'http://maps.googleapis.com/maps/api/js?sensor=false', array('jquery'), false, true );
+	wp_enqueue_script( 'jsjac', get_template_directory_uri() . '/js/jsjac.uncompressed.js', array( 'jquery' ), false, true );
+	wp_enqueue_script( 'jsjac-client', get_template_directory_uri() . '/js/jsjac-client.js', array( 'jquery', 'jquery-ui', 'jsjac' ), false, true );
 }
 
 function wize_load_adminscripts() {
@@ -97,7 +99,7 @@ function wize_load_adminscripts() {
         wp_enqueue_script('ui-custom-js', get_stylesheet_directory_uri() . '/admin/post/js/ui-custom.js');
         wp_enqueue_script('datepicker-js', get_stylesheet_directory_uri() . '/admin/post/js/datepicker.js');
 		wp_enqueue_script('upload-js', get_stylesheet_directory_uri() . '/admin/post/js/upload.js');
-	}	
+	}
 }
 
 function loadSetupReference() {
@@ -107,7 +109,7 @@ $font = of_get_option('font_pred');
         wp_enqueue_style('setup', get_template_directory_uri() . '/admin/post/css/options-panel.css');
         wp_enqueue_style('datepicker', get_template_directory_uri() . '/admin/post/css/datepicker.css');
     } else {
-		wp_enqueue_script('jquery');	
+		wp_enqueue_script('jquery');
 		wp_enqueue_script('soundmanager2', get_template_directory_uri() . '/js/soundmanager2.js', array('jquery'));
 		wp_enqueue_style('style', get_stylesheet_uri() );
         wp_enqueue_style('custom-style', get_template_directory_uri() . '/css/custom.css'); //Our Custom Stylesheet
@@ -115,14 +117,14 @@ $font = of_get_option('font_pred');
         wp_enqueue_style('prettyPhoto', get_template_directory_uri() . '/css/prettyPhoto.css');
         wp_enqueue_style('shortcodes', get_template_directory_uri() . '/css/shortcodes.css');
 		wp_enqueue_style('slider', get_template_directory_uri() . '/css/slider.css');
-		wp_enqueue_style('hover', get_template_directory_uri() . '/css/hover.css');	
+		wp_enqueue_style('hover', get_template_directory_uri() . '/css/hover.css');
 		if (of_get_option('active_resp', '1') == '1') {
 		wp_enqueue_style('responsive', get_template_directory_uri() . '/css/responsive.css');
 		}
 		wp_enqueue_style('font', "$protocol://fonts.googleapis.com/css?family=$font:400,700,900,300" );
 		if (of_get_option('active_player', '1') == '1') {
 		wp_enqueue_style('player', get_template_directory_uri() . '/css/player.css');
-		} 
+		}
     }
 		if (of_get_option('active_ajax', '1') == '1') {
 			add_action('wp_enqueue_scripts', 'aws_load_scripts');
@@ -135,7 +137,7 @@ $font = of_get_option('font_pred');
 				'loader' 		=> get_option('loader')
 			);
 			wp_localize_script('ajax', 'aws_data', $data);
-		    } 
+		    }
 		}
 }
 
@@ -205,7 +207,7 @@ function pag_full_wz($pages = '', $range = 4) {
 	echo'
 	<div class="pagination-bottom-media">
 	<div class="pagination-pos">';
-	
+
         echo "<div class=\"pagination\">";
         if ($paged > 2 && $paged > $range + 1 && $showitems < $pages)
             echo "<a href='" . get_pagenum_link(1) . "'>&laquo; First</a>";
@@ -221,7 +223,7 @@ function pag_full_wz($pages = '', $range = 4) {
         if ($paged < $pages - 1 && $paged + $range - 1 < $pages && $showitems < $pages)
             echo "<a href='" . get_pagenum_link($pages) . "'>Last &raquo;</a>";
         echo "</div>\n";
-	echo'	
+	echo'
     </div>
     </div><!-- end .pagination-pos -->';
     }
@@ -243,7 +245,7 @@ function pag_half_wz($pages = '', $range = 4) {
 	echo'
 	<div class="pagination-bottom">
 	<div class="pagination-pos">';
-	
+
         echo "<div class=\"pagination\">";
         if ($paged > 2 && $paged > $range + 1 && $showitems < $pages)
             echo "<a href='" . get_pagenum_link(1) . "'>&laquo; First</a>";
@@ -259,7 +261,7 @@ function pag_half_wz($pages = '', $range = 4) {
         if ($paged < $pages - 1 && $paged + $range - 1 < $pages && $showitems < $pages)
             echo "<a href='" . get_pagenum_link($pages) . "'>Last &raquo;</a>";
         echo "</div>\n";
-	echo'	
+	echo'
     </div>
     </div><!-- end .pagination-pos -->';
     }
@@ -337,4 +339,3 @@ function bbytes_likebox( $atts ) {
     return ob_get_clean();
 }
 add_shortcode( 'bbytes-likebox', 'bbytes_likebox' );
-

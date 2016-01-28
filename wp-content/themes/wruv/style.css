@@ -4720,6 +4720,11 @@ clear: both;
 zoom: 1;
 }
 
+#tapeman-chat {
+    background: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/252172/wruv-tapeman.png) no-repeat center 8px;
+    height: 200px;
+}
+
 @media screen and (min-width: 800px) {
   .header-col-1, .header-col.col-1 {
     width: 20%;

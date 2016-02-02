@@ -87,6 +87,7 @@ function wizedesign_load_javascript() {
     wp_enqueue_script('map', 'http://maps.googleapis.com/maps/api/js?sensor=false', array('jquery'), false, true );
 	wp_enqueue_script( 'jsjac', get_template_directory_uri() . '/js/jsjac.uncompressed.js', array( 'jquery' ), false, true );
 	wp_enqueue_script( 'jsjac-client', get_template_directory_uri() . '/js/jsjac-client.js', array( 'jquery', 'jquery-ui', 'jsjac' ), false, true );
+  wp_enqueue_script( 'mediaelement', 'https://cdnjs.cloudflare.com/ajax/libs/mediaelement/2.19.0/mediaelement-and-player.min.js', array( 'jquery' ), false, true );
 }
 
 function wize_load_adminscripts() {
@@ -126,6 +127,7 @@ $font = of_get_option('font_pred');
 		wp_enqueue_style('player', get_template_directory_uri() . '/css/player.css');
 		}
     }
+    // wp_enqueue_style( 'mediaelement', 'https://cdnjs.cloudflare.com/ajax/libs/mediaelement/2.19.0/mediaelementplayer.min.css' );
 		if (of_get_option('active_ajax', '1') == '1') {
 			add_action('wp_enqueue_scripts', 'aws_load_scripts');
 			function aws_load_scripts() {

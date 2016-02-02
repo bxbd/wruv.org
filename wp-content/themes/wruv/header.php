@@ -108,13 +108,13 @@ switch ($playerar) {
          <div id="multiplayer">
            <h3 class="player-label">Desktop Player</h3>
            <div class="player-choice">
-             <div class="dot orange"><br><a class="player-btn" href="#"><strong>48</strong>KBPS</a></div>
+             <div class="dot orange"><br><a class="player-btn" target="_blank" href="http://wruv.org/wruv48.m3u"><strong>48</strong>KBPS</a></div>
            </div>
            <div class="player-choice">
-             <div class="dot green"><br><a class="player-btn" href="#"><strong>128</strong>KBPS</a></div>
+             <div class="dot green"><br><a class="player-btn" target="_blank" href="http://wruv.org/wruv128.m3u"><strong>128</strong>KBPS</a></div>
            </div>
            <div class="player-choice">
-             <div class="dot red"><br><a class="player-btn" href="#"><strong>256</strong>KBPS</a></div>
+             <div class="dot red"><br><a class="player-btn" target="_blank" href="http://wruv.org/wruv256.m3u"><strong>256</strong>KBPS</a></div>
            </div>
          </div>
        </div>
@@ -150,6 +150,9 @@ switch ($playerar) {
                 </tbody></table>
                 </form>
              </div>
+             <div id="concealed-player">
+               <audio id="main-player" width="200" height="25" src="http://icecast.uvm.edu:8005/wruv_fm_128" type="audio/mpeg"></audio>
+             </div>
         </div>
            <div class="tapedeck-controls">
              <span class="tape-label" id="chat-label">
@@ -163,8 +166,8 @@ switch ($playerar) {
              <div class="inner">
                <a href="#" class="tape-button" id="chat-button" onclick="doChatLogin(document.forms.loginForm); return false;"><i class="fa fa-comment-o"></i></a>
                <a href="#" class="tape-button"><i class="fa fa-external-link"></i></a>
-               <a href="#" class="tape-button"><i class="fa fa-play"></i></a>
-               <a href="#" class="tape-button"><i class="fa fa-stop"></i></a>
+               <a href="#" id="play-button" class="tape-button"><i class="fa fa-play"></i></a>
+               <a href="#" id="stop-button" class="tape-button"><i class="fa fa-stop"></i></a>
              </div>
            </div>
          </div>
@@ -175,10 +178,10 @@ switch ($playerar) {
            <div class="needle" id="needle"></div>
          </div>
          <div class="header-meta">
-           DJ Name<br><hr class="drawn">
-           Show Title<br>
+           My Dog is a Person Too<br>
+           <sup class="with">with</sup> DJ Liz<br><hr class="drawn">
+           <span class="genre">music for the being alive jive (mix of indie rock, folk, blues, electronic, and more)</span>
          </div>
-         <hr>
          <div id="bar-vu-meter">
            <div class="inner">
            </div>

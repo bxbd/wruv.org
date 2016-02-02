@@ -121,6 +121,17 @@
 });
 
 $( document ).ready( function() {
+  var playerElement = $('audio#main-player')[0];
+  var player = new MediaElement( playerElement, {
+    type: 'audio/mpeg',
+  } );
+  $('#play-button').click( function() {
+    player.play();
+  });
+  $('#stop-button').click( function() {
+    player.pause();
+  })
+
   setInterval( iterateMainVU, 500 );
   populateBarVU();
 })

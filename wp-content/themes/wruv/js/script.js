@@ -120,40 +120,37 @@
 
 });
 
+
 $( document ).ready( function() {
   var playerElement = $('audio#main-player')[0];
   var player = new MediaElement( playerElement, {
     type: 'audio/mpeg',
-  } );
-  $('#play-button').click( function() {
-    player.play();
-  });
-  $('#stop-button').click( function() {
-    player.pause();
-  })
-
-  setInterval( iterateMainVU, 500 );
-  populateBarVU();
+		success: function( media, dom ) {
+			if ( media.paused ) {
+				window.playerState = 'paused';
+			}
+			media.addEventListener( 'playing', function() {
+				window.playerState = 'playing';
+			  window.VUTimer = setInterval( iterateMainVU, 500 );
+			})
+		}
+	} );
+	$('#play-pause-button').click( function() {
+		if ( window.playerState == 'paused' ) {
+			$('body').addClass('playing');
+			$('#play-pause-button .fa').addClass('fa-pause');
+			$('#play-pause-button .fa').removeClass('fa-play');
+			player.play();
+		} else {
+			player.pause();
+			$('body').removeClass('playing');
+			window.playerState = 'paused';
+			clearTimeout(window.VUTimer);
+			$('#play-pause-button .fa').removeClass('fa-pause');
+			$('#play-pause-button .fa').addClass('fa-play');
+		}
+	})
 })
-function populateBarVU() {
-  var parent_container = $('#bar-vu-meter > .inner');
-  var parent_width = parent_container.width();
-  var needs_more_bars = true;
-  var i = 0;
-  while( needs_more_bars ) {
-    parent_container.append( '<div class="bar"></div>' );
-    var current_bar = parent_container.find( '.bar:last-child' );
-    console.log(parent_width);
-    console.log(current_bar.position());
-    if ( current_bar.position().left + 50 > parent_width ) {
-      needs_more_bars = false;
-    }
-    if ( i > 50 ) {
-      needs_more_bars = false;
-    }
-    i++;
-  }
-}
 function iterateMainVU() {
   var val = Math.floor( Math.random() * 70 + 1 ) - 45;
   $( '#needle' ).css('transform', 'rotateZ( '+val+'deg)');

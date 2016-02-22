@@ -105,49 +105,19 @@ switch ($playerar) {
                     }
    ?>
          </div><!-- end #logo -->
-         <div id="multiplayer">
-           <h3 class="player-label">Desktop Player</h3>
-           <div class="player-choice">
-             <div class="dot orange"><br><a class="player-btn" target="_blank" href="http://wruv.org/wruv48.m3u"><strong>48</strong>KBPS</a></div>
-           </div>
-           <div class="player-choice">
-             <div class="dot green"><br><a class="player-btn" target="_blank" href="http://wruv.org/wruv128.m3u"><strong>128</strong>KBPS</a></div>
-           </div>
-           <div class="player-choice">
-             <div class="dot red"><br><a class="player-btn" target="_blank" href="http://wruv.org/wruv256.m3u"><strong>256</strong>KBPS</a></div>
-           </div>
-         </div>
        </div>
        <div class="header-col col-2">
          <div class="tapeman-container">
            <div id="tapeman-chat" class="big-chat">
              <div id="chat_login_pane">
                 <form name="loginForm" onsubmit="return false;" action="#">
-                   <input type="image" class="chat_button" src="/img/chat/login.gif" title="Connect!" onclick="doChatLogin(this.form)">
                 </form>
              </div>
 
              <div id="chat_sendmsg_pane" class="big-chat" style="display:none;">
                 <form name="sendForm" onsubmit="return false" action="#">
                 <div id="chat_dialog" class="big-chat"></div>
-                <table>
-                   <tbody><tr>
-                      <td width="16">
-                         <input type="image" class="chat_button" src="/img/chat/send.gif" title="Send" onclick="sendMsg(this.form)">
-                      </td>
-                      <td width="16">
-                         <a href="#" onclick="return doChatLogout();"><img border="0" style="margin-top: 1px;" class="chat_button" src="/img/chat/logout.gif" title="Logout"></a>
 
-                      </td>
-
-                      <td nowrap="1">
-                         <small>Enter message:</small>
-                      </td>
-                      <td width="100%">
-                         <input type="text" name="msg" id="chat_sendmsg" class="big-chat" onkeyup="chat_box_keyevent(event, sendMsg);">
-                      </td>
-                   </tr>
-                </tbody></table>
                 </form>
              </div>
              <div id="concealed-player">
@@ -156,18 +126,28 @@ switch ($playerar) {
         </div>
            <div class="tapedeck-controls">
              <span class="tape-label" id="chat-label">
-               Chat With The DJ</span>
+               DJ Chat</span>
                      <span class="tape-label">
                Full Size</span>
-                     <span class="tape-label">
+                     <span class="tape-label" id="play-label">
                Play</span>
                              <span class="tape-label">
-               Stop</span>
+               Stream</span>
              <div class="inner">
                <a href="#" class="tape-button" id="chat-button" onclick="doChatLogin(document.forms.loginForm); return false;"><i class="fa fa-comment-o"></i></a>
                <a href="#" class="tape-button"><i class="fa fa-external-link"></i></a>
-               <a href="#" id="play-button" class="tape-button"><i class="fa fa-play"></i></a>
-               <a href="#" id="stop-button" class="tape-button"><i class="fa fa-stop"></i></a>
+               <a href="#" id="play-pause-button" class="tape-button"><i class="fa fa-play"></i></a>
+							 <div id="multiplayer" class="tape-button">
+								 <div class="player-choice">
+									 <div class="dot red"><a class="player-btn" target="_blank" href="http://wruv.org/wruv256.m3u"><strong>256</strong>KBPS</a></div>
+								 </div>
+								 <div class="player-choice">
+									 <div class="dot green"><a class="player-btn" target="_blank" href="http://wruv.org/wruv128.m3u"><strong>128</strong>KBPS</a></div>
+								 </div>
+								 <div class="player-choice">
+									 <div class="dot orange"><a class="player-btn" target="_blank" href="http://wruv.org/wruv48.m3u"><strong>48</strong>KBPS</a></div>
+								 </div>
+							 </div>
              </div>
            </div>
          </div>

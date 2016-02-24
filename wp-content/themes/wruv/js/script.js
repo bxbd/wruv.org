@@ -131,7 +131,7 @@ $( document ).ready( function() {
 			}
 			media.addEventListener( 'playing', function() {
 				window.playerState = 'playing';
-			  window.VUTimer = setInterval( iterateMainVU, 500 );
+			  window.VUTimer = setInterval( iterateMainVU, 200 );
 			})
 		}
 	} );
@@ -144,12 +144,18 @@ $( document ).ready( function() {
 		} else {
 			player.pause();
 			$('body').removeClass('playing');
+			$('#needle').css('transform', 'rotateZ(-35deg)');
 			window.playerState = 'paused';
 			clearTimeout(window.VUTimer);
 			$('#play-pause-button .fa').removeClass('fa-pause');
 			$('#play-pause-button .fa').addClass('fa-play');
 		}
-	})
+	});
+	$('#chat-button').click( function() {
+		console.log('opening chat');
+		doChatLogin(document.forms.loginForm);
+		$('#chat-area').slideToggle();
+	});
 })
 function iterateMainVU() {
   var val = Math.floor( Math.random() * 70 + 1 ) - 45;

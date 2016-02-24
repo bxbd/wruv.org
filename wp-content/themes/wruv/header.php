@@ -109,20 +109,23 @@ switch ($playerar) {
        <div class="header-col col-2">
          <div class="tapeman-container">
            <div id="tapeman-chat" class="big-chat">
-             <div id="chat_login_pane">
-                <form name="loginForm" onsubmit="return false;" action="#">
-                </form>
-             </div>
-
-             <div id="chat_sendmsg_pane" class="big-chat" style="display:none;">
-                <form name="sendForm" onsubmit="return false" action="#">
-                <div id="chat_dialog" class="big-chat"></div>
-
-                </form>
-             </div>
              <div id="concealed-player">
                <audio id="main-player" width="200" height="25" src="http://icecast.uvm.edu:8005/wruv_fm_128" type="audio/mpeg"></audio>
              </div>
+						 <div id="chat-area" style="display:none;">
+							 <div id="chat_login_pane" style="display: none;">
+		             <form name="loginForm" onsubmit="return false;" action="#">
+		             </form>
+							 </div>
+
+							 <div id="chat_sendmsg_pane" class="big-chat">
+								 <div id="chat_dialog" class="big-chat">
+								 </div>
+								 <form name="sendForm" onsubmit="return false" action="#">
+									 <input type="text" size="30" name="msg" id="chat_sendmsg" placeholder="Start typing..." value=""></input>
+								 </form>
+							 </div>
+						 </div>
         </div>
            <div class="tapedeck-controls">
              <span class="tape-label" id="chat-label">

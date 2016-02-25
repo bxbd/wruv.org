@@ -324,11 +324,11 @@ tr.alt {
 	background-position: center bottom,center top,center 10px;
 	min-height: 100px;
 	background-size: 100%,100%,100%;
-	padding: 20px;
+	padding: 14px;
 	font-family: 'Covered By Your Grace',cursive;
-	font-size: 30px;
+	font-size: 22px;
 	line-height: 80%;
-	min-height: 145px;
+	min-height: 108px;
 }
 
 sup.with {
@@ -510,7 +510,7 @@ hr.drawn {
 }
 
 #header hr {
-	margin: 12px auto 0;
+	margin: 0 auto;
 	max-width: 98%;
 }
 
@@ -539,7 +539,7 @@ hr.drawn {
 }
 
 .on-air-img {
-	width: 50%;
+	width: 45%;
 }
 
 .tape-label {
@@ -547,14 +547,14 @@ hr.drawn {
 	font-family: 'Tittillium Web',sans-serif;
 	text-align: center;
 	display: inline-block;
-	width: 15%;
+	width: 20%;
 	font-size: 13px;
 	vertical-align: top;
 }
-
+/*
 #chat-button,#chat-label {
 	width: 30%;
-}
+}*/
 
 #chat-area {
 	height: 100%;
@@ -565,6 +565,14 @@ hr.drawn {
 	margin: 0 8px;
 	padding: 5px 10px;
 	box-sizing: border-box;
+	position: relative;
+	text-align: center;
+}
+
+#chat-loader {
+	position: absolute;
+	top: 25%;
+	left: 35%;
 }
 
 #main-vu-meter:before {
@@ -615,7 +623,7 @@ hr.drawn {
 /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
 	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#636466',endColorstr='#434343',GradientType=0);
 /* IE6-9 */
-	width: 15%;
+	width: 20%;
 	height: 30px;
 	border-radius: 4px;
 	color: #fff;
@@ -626,10 +634,10 @@ hr.drawn {
 	text-align: center;
 	vertical-align: top;
 }
-
+/*
 #play-pause-button, #play-label {
 	width: 25%;
-}
+}*/
 
 .tapedeck-controls .fa:before {
 	transition: 1s ease all;
@@ -4953,8 +4961,8 @@ ul,ol {
 
 #tapeman-chat {
 	background: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/252172/wruv-tapeman.png) no-repeat center 8px;
-	background-size: 75%;
-	height: 145px;
+	background-size: contain;
+	height: 165px;
 }
 
 .header-meta .genre {
@@ -4965,15 +4973,15 @@ ul,ol {
 
 @media screen and (min-width: 800px) {
 	.header-col-1,.header-col.col-1 {
-		width: 23%;
+		width: 25%;
 	}
 
 	.header-col.col-2 {
-		width: 37%;
+		width: 30%;
 	}
 
 	.header-col.col-3 {
-		width: 39%;
+		width: 44%;
 	}
 }
 

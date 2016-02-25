@@ -113,6 +113,10 @@ switch ($playerar) {
                <audio id="main-player" width="200" height="25" src="http://icecast.uvm.edu:8005/wruv_fm_128" type="audio/mpeg"></audio>
              </div>
 						 <div id="chat-area" style="display:none;">
+							 <div id="chat-loader">
+							  <i id="chat-loader-spinner" class="fa fa-spinner fa-spin fa-4x"></i><br>
+								<span class="loading-message">Connecting...</span>
+							 </div>
 							 <div id="chat_login_pane" style="display: none;">
 		             <form name="loginForm" onsubmit="return false;" action="#">
 		             </form>

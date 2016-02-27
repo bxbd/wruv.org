@@ -144,7 +144,7 @@ $( document ).ready( function() {
 		} else {
 			player.pause();
 			$('body').removeClass('playing');
-			$('#needle').css('transform', 'rotateZ(-35deg)');
+			$('#needle').css('transform', 'rotateZ(-45deg)');
 			window.playerState = 'paused';
 			clearTimeout(window.VUTimer);
 			$('#play-pause-button .fa').removeClass('fa-pause');
@@ -158,7 +158,7 @@ $( document ).ready( function() {
 	});
 })
 function iterateMainVU() {
-  var val = Math.floor( Math.random() * 70 + 1 ) - 45;
+  var val = Math.floor( Math.random() * 80 + 1 ) - 45;
   $( '#needle' ).css('transform', 'rotateZ( '+val+'deg)');
 }
 

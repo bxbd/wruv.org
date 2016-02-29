@@ -9,22 +9,22 @@
  License: GNU GENERAL PUBLIC LICENSE
 
  -------------------------------------------
-      01. CSS RESET
-      02. MISC
-      03. GENERAL
-      04. LAYOUT
-      05. NAVIGATION
-      06. WIDGETS
-      07. FOOTER & SOCIAL MEDIA
-      08. PAGINATION
-      09. PLAYER
-      10. COMMENTS
-      11. CONTACT
-      12. WORDPRESS CORE
+	  01. CSS RESET
+	  02. MISC
+	  03. GENERAL
+	  04. LAYOUT
+	  05. NAVIGATION
+	  06. WIDGETS
+	  07. FOOTER & SOCIAL MEDIA
+	  08. PAGINATION
+	  09. PLAYER
+	  10. COMMENTS
+	  11. CONTACT
+	  12. WORDPRESS CORE
  -------------------------------------------
  */
 /* -------------------------------------------
-    01. CSS RESET
+	01. CSS RESET
    ------------------------------------------- */
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td {
 	padding: 0;
@@ -66,7 +66,7 @@ blockquote:before,blockquote:after,q:before,q:after {
 }
 
 /* -------------------------------------------
-    02. MISC
+	02. MISC
    ------------------------------------------- */
 .clearfix:after {
 	visibility: hidden;
@@ -111,7 +111,7 @@ blockquote:before,blockquote:after,q:before,q:after {
 }
 
 /* -------------------------------------------
-    03. GENERAL
+	03. GENERAL
    ------------------------------------------- */
 body {
 	color: #1d1d1b;
@@ -281,7 +281,7 @@ tr.alt {
 }
 
 /* -------------------------------------------
-    04. LAYOUT
+	04. LAYOUT
    ------------------------------------------- */
 .wrap {
 	background: url(images/bg-trans.png);
@@ -322,7 +322,7 @@ tr.alt {
 	text-align: right;
 }
 
-sup.with {
+sup.onair-with {
 	font-size: 16px;
 	vertical-align: top;
 }
@@ -2487,7 +2487,7 @@ span#player-meta-widget {
 }
 
 /* -------------------------------------------
-    05. NAVIGATION
+	05. NAVIGATION
    ------------------------------------------- */
 #main {
 	margin-top: 20px;
@@ -2647,7 +2647,7 @@ span#player-meta-widget {
 }
 
 /* -------------------------------------------
-    06. WIDGETS
+	06. WIDGETS
    ------------------------------------------- */
 .widgets-col {
 	overflow: hidden;
@@ -2745,9 +2745,9 @@ span#player-meta-widget {
 /*just an outline*/
 /*
 text-shadow: -1px -1px 0 #000,
-    1px -1px 0 #000,
-    -1px 1px 0 #000,
-    1px 1px 0 #000;
+	1px -1px 0 #000,
+	-1px 1px 0 #000,
+	1px 1px 0 #000;
 */
 /*glowy*/
 	text-shadow: -1px -1px 2px #000,1px -1px 2px #f75c46,-1px 1px 2px #000,1px 1px 2px #f75c46;
@@ -3849,7 +3849,7 @@ text-shadow: -1px -1px 0 #000,
 }
 
 /* -------------------------------------------
-    07. FOOTER & SOCIAL MEDIA
+	07. FOOTER & SOCIAL MEDIA
    ------------------------------------------- */
 /* --- footer --- */
 #footer {
@@ -4279,7 +4279,7 @@ text-shadow: -1px -1px 0 #000,
 }
 
 /* -------------------------------------------
-    08. PAGINATION
+	08. PAGINATION
    ------------------------------------------- */
 .pagination-bottom-media {
 	width: 1015px;
@@ -4329,7 +4329,7 @@ text-shadow: -1px -1px 0 #000,
 }
 
 /* -------------------------------------------
-    09. PLAYER
+	09. PLAYER
    ------------------------------------------- */
 ul.fap-my-playlist {
 	color: #888;
@@ -4443,7 +4443,7 @@ ul.fap-my-playlist li:hover,.widgets-col-player ul.fap-my-playlist li:hover {
 }
 
 /* -------------------------------------------
-    10. COMMENTS
+	10. COMMENTS
    ------------------------------------------- */
 #comment {
 	border: 1px solid #bbb;
@@ -4725,7 +4725,7 @@ p.logged-in-as {
 }
 
 /* -------------------------------------------
-    11. CONTACT
+	11. CONTACT
    ------------------------------------------- */
 #commentsText {
 	padding: 0 0 0 5px;
@@ -4754,7 +4754,7 @@ form#contact input {
 }
 
 /* -------------------------------------------
-    12. WORDPRESS CORE
+	12. WORDPRESS CORE
    ------------------------------------------- */
 .alignnone {
 	margin: 5px 20px 20px 0;

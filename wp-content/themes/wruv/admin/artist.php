@@ -89,6 +89,7 @@ function artist_settings_update($post_ID = 0) {
 	update_post_meta($post_ID, "at_active", $_POST["at_active"]);
 	update_post_meta($post_ID, "at_place", $_POST["at_place"]);
 	update_post_meta($post_ID, "at_website", $_POST["at_website"]);
+    update_post_meta($post_ID, "at_website_2", $_POST["at_website_2"]);
     }
 }
 function artist_settings_meta_source() {
@@ -99,9 +100,10 @@ function artist_settings_meta_source() {
 	$at_active      = get_post_meta($post->ID, 'at_active', true);
 	$at_place      = get_post_meta($post->ID, 'at_place', true);
 	$at_website      = get_post_meta($post->ID, 'at_website', true);
+    $at_website_2      = get_post_meta($post->ID, 'at_website_2', true);
     echo '		
 <div style="padding-top:10px;">
-   <label style="display:block;padding:2px;">' . __('Birth name', 'clubber') . ': </label>
+   <label style="display:block;padding:2px;">' . __('Name', 'clubber') . ': </label>
    <input style="width:220px;" name="at_name" value="' . $at_name . '" />
    Enter the birth name of the artist.
 </div>
@@ -111,24 +113,29 @@ function artist_settings_meta_source() {
    Click inside the field, data picker.
 </div>
 <div style="padding-top:10px;">
-   <label style="display:block;padding:2px;">' . __('Birthplace', 'clubber') . ': </label>
+   <label style="display:block;padding:2px;">' . __('Show Name', 'clubber') . ': </label>
    <input style="width:220px;" name="at_place" value="' . $at_place . '" />
-   Enter the birthplace of the artist.
+   Enter the show title.
 </div>
 <div style="padding-top:10px;">
    <label style="display:block;padding:2px;">' . __('Genres', 'clubber') . ': </label>
    <input style="width:220px;" name="at_genres" value="' . $at_genres . '" />
-   Enter of the artist musical genres.
+   Enter of the musical genres.
 </div>
 <div style="padding-top:10px;">
    <label style="display:block;padding:2px;">' . __('Years active', 'clubber') . ': </label>
    <input style="width:220px;" name="at_active" value="' . $at_active . '" />
-   Enter years of activity of the artist.
+   Enter years of activity of the dj.
 </div>
 <div style="padding-top:10px;">
    <label style="display:block;padding:2px;">' . __('Website', 'clubber') . ': </label>
    <input style="width:220px;" name="at_website" value="' . $at_website . '" />
-   Enter the website of the artist.
+   Enter the full URL website of the dj.
+</div>
+<div style="padding-top:10px;">
+   <label style="display:block;padding:2px;">' . __('Social', 'clubber') . ': </label>
+   <input style="width:220px;" name="at_website_2" value="' . $at_website_2 . '" />
+   Enter the full URL of the social media profile for the dj.
 </div>
 ';
 }

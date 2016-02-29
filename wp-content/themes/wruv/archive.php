@@ -50,7 +50,7 @@ if (have_posts())
             </div><!-- end .bl2page-cover -->';
         }
        echo '
-            <h2 class="bl2page-title"><a href="' . get_permalink() . '"></a></h2>
+            <h2 class="bl2page-title"><a href="' . get_permalink() . '">' . get_the_title() . '</a></h2>
             <div class="bl2page-text">
                <p>' . the_excerpt_max(280) . '</p>
 		    </div><!-- end .bl2page-text -->

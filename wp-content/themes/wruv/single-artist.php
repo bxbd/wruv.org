@@ -16,6 +16,7 @@ $place          = get_post_meta($post->ID, 'at_place', true);
 $genres         = get_post_meta($post->ID, 'at_genres', true);
 $active         = get_post_meta($post->ID, 'at_active', true);
 $website        = get_post_meta($post->ID, 'at_website', true);
+$website_2      = get_post_meta($post->ID, 'at_website_2', true);
 $time           = strtotime($born);
 $pretty_date_yy = date('Y', $time);
 $pretty_date_M  = date('F', $time);
@@ -45,8 +46,15 @@ echo '
 if ($name != null) {
     echo '	  
             <div class="evsng-info-in">
-               <div class="atsng-cell">' . __('Birth name', 'wizedesign') . '</div>
+               <div class="atsng-cell">' . __('Name', 'wizedesign') . '</div>
                <div class="atsng-cell-info">' . $name . '</div>					  
+            </div>';
+}
+if ($place != null) {
+    echo '
+            <div class="evsng-info-in">                                     
+               <div class="atsng-cell">' . __('Show Name', 'wizedesign') . '</div>
+               <div class="atsng-cell-info">' . $place . '</div>                                    
             </div>';
 }
 if ($born != null) {
@@ -54,13 +62,6 @@ if ($born != null) {
             <div class="evsng-info-in">                                     
                <div class="atsng-cell">' . __('Born', 'wizedesign') . '</div>
                <div class="atsng-cell-info">' . $pretty_date_d . ' ' . $pretty_date_M . '  ' . $pretty_date_yy . '</div>                                    
-            </div>';
-}
-if ($place != null) {
-    echo '
-            <div class="evsng-info-in">                                     
-               <div class="atsng-cell">' . __('Birthplace', 'wizedesign') . '</div>
-               <div class="atsng-cell-info">' . $place . '</div>                                    
             </div>';
 }
 if ($genres != null) {
@@ -82,6 +83,13 @@ if ($website != null) {
             <div class="evsng-info-in">                                     
                <div class="atsng-cell">' . __('Website', 'wizedesign') . '</div>
                <div class="atsng-cell-info"><a href="' . $website . '" rel="nofollow" target="_blank">' . $website . '</a></div>                                    
+            </div>';
+}
+if ($website_2 != null) {
+    echo '
+            <div class="evsng-info-in">                                     
+               <div class="atsng-cell">' . __('Social', 'wizedesign') . '</div>
+               <div class="atsng-cell-info"><a href="' . $website_2 . '" rel="nofollow" target="_blank">' . $website_2 . '</a></div>                                    
             </div>';
 }
 echo '

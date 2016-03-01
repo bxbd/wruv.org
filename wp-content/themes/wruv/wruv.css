@@ -403,3 +403,49 @@ hr.drawn {
 	background-size: contain;
 	height: 165px;
 }
+
+@media (max-width: 768px) {
+	#text-15 .textwidget {
+		background: transparent !important;
+	}
+	#text-20 img {
+		width: 70px;
+		height: auto;
+	}
+	#footer-bottom .footer-row,
+	body .footer-row {
+		padding: 5px;
+	}
+	body #footer-bottom {
+		padding: 0 !important;
+		height: auto;
+	}
+	.footer-bottom-social #footer-social {
+		width: 40%;
+		padding-bottom: 60px;
+	}
+	#footer .footer-row .footer-col {
+		float: none;
+		width: 80% !important;
+		padding: 20px;
+		display: block;
+		margin: 0 auto;
+		text-align: center;
+	}
+}
+
+@media (max-width: 414px) {
+	.footer-bottom-social #footer-social {
+		width: 100%;
+		padding-left: 60px;
+	}
+}
+
+@media (max-width: 375px) {
+	#footer .footer-row .footer-col {
+		width: 90% !important;
+	}
+	#footer-bottom .footer-row {
+		max-width: 375px;
+	}
+}

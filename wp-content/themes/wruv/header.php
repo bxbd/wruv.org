@@ -12,39 +12,43 @@
 <!-- Title -->
 <title>
 <?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+
 	$prefix = false;
 
-		 if (function_exists('is_tag') && is_tag()) {
-			single_tag_title('Tag Archive for &quot;');
-			echo '&quot; - ';
+	 if (function_exists('is_tag') && is_tag()) {
+		single_tag_title('Tag Archive for &quot;');
+		echo '&quot; - ';
 
-			$prefix = true;
-		 } elseif (is_archive()) {
+		$prefix = true;
+	 } elseif (is_archive()) {
 
-			wp_title(''); echo ' '.__('Archive').' - ';
-			$prefix = true;
+		wp_title(''); echo ' '.__('Archive').' - ';
+		$prefix = true;
 
-		 } elseif (is_search()) {
+	 } elseif (is_search()) {
 
-			echo __('Search for', 'wizedesign').' &quot;'.wp_specialchars($s).'&quot; - ';
-			$prefix = true;
+		echo __('Search for', 'wizedesign').' &quot;'.wp_specialchars($s).'&quot; - ';
+		$prefix = true;
 
-		 } elseif (!(is_404()) && (is_single()) || (is_page())) {
-				wp_title('');
-				echo '  ';
-		 } elseif (is_404()) {
-			echo __('Not Found', 'wizedesign').' - ';
-		 }
+	 } elseif (!(is_404()) && (is_single()) || (is_page())) {
+			wp_title('');
+			echo '  ';
+	 } elseif (is_404()) {
+		echo __('Not Found', 'wizedesign').' - ';
+	 }
 
-		 if (is_home()) {
-			bloginfo('name'); echo ' - '; bloginfo('description');
-		 } else {
-		  bloginfo('name');
-		 }
+	 if (is_home()) {
+		bloginfo('name'); echo ' - '; bloginfo('description');
+	 } else {
+	  bloginfo('name');
+	 }
 
-		 if ($paged > 1) {
-			echo ' - page '. $paged;
-		 }
+	 if ($paged > 1) {
+		echo ' - page '. $paged;
+	 }
 	?></title>
 
 <!-- Favicon -->
@@ -75,15 +79,15 @@
 <?php
 $playerar = of_get_option('player_audio_radio');
 if (of_get_option('active_player', '1') == '1') {
-switch ($playerar) {
-		 case "player_audio":
-		 echo ' '. get_template_part( 'player' ) . '';
-		 break;
+	switch ($playerar) {
+		case "player_audio":
+			echo ' '. get_template_part( 'player' ) . '';
+			break;
 
-		 case "player_radio":
-		 echo ' '. get_template_part( 'radio' ) . '';
-		 break;
-		 }
+		case "player_radio":
+			echo ' '. get_template_part( 'radio' ) . '';
+			break;
+	}
 }
 ?>
 
@@ -93,19 +97,19 @@ switch ($playerar) {
 			<div class="header-col header-col-1">
 				<div id="logo">
 					<?php
-						if (of_get_option('logo_upload','true') == 'true') {
+						if( of_get_option('logo_upload','true') == 'true' ) {
 						}
 						else {
-							if (of_get_option('logo_upload',null) != null){
+							if( of_get_option('logo_upload',null) != null ) {
 								$logo_url = of_get_option('logo_upload');
 							}
-							else{
+							else {
 								$logo_url = get_template_directory_uri().'/images/logo.png';
 							}
 							?>
 							<a href="<?= get_bloginfo('url') ?>"><img src="<?= $logo_url ?>" alt="logo" /></a>
+						<?php
 						}
-					?>
 					?>
 				</div><!-- end #logo -->
 			</div>
@@ -153,13 +157,13 @@ switch ($playerar) {
 							<a href="#" id="play-pause-button" class="tape-button"><i class="fa fa-play"></i></a>
 							<div id="multiplayer" class="tape-button">
 								<div class="player-choice">
-									<div class="dot red"><a class="player-btn" target="_blank" href="http://wruv.org/wruv256.m3u"><strong>256</strong>KBPS</a></div>
+									<div class="dot red"><a class="player-btn" href="/wruv256.m3u"><strong>256</strong>KBPS</a></div>
 								</div>
 								<div class="player-choice">
-									<div class="dot green"><a class="player-btn" target="_blank" href="http://wruv.org/wruv128.m3u"><strong>128</strong>KBPS</a></div>
+									<div class="dot green"><a class="player-btn" href="/wruv128.m3u"><strong>128</strong>KBPS</a></div>
 								</div>
 								<div class="player-choice">
-									<div class="dot orange"><a class="player-btn" target="_blank" href="http://wruv.org/wruv48.m3u"><strong>48</strong>KBPS</a></div>
+									<div class="dot orange"><a class="player-btn" href="/wruv48.m3u"><strong>&nbsp;48</strong>KBPS</a></div>
 								</div>
 							</div>
 						</div>
@@ -167,217 +171,64 @@ switch ($playerar) {
 				</div>
 			</div>
 			<div class="header-col col-3">
-				<img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/252172/wruv-on-air.png" class="on-air-img">
+				<img src="/wp-content/themes/wruv/images/wruv-on-air.png" class="on-air-img">
 				<div id="main-vu-meter">
 					<div class="needle" id="needle"></div>
 				</div>
 				<div class="header-meta">
 					<div class="onair-showname">My Dog is a Person Too</div>
-					<div class="onair-with">with</sup> DJ Liz</div>
+					<div class="onair-djname-withwith">
+						<sup class="onair-with">with</sup>
+						<div class="onair-djname">DJ Liz</div>
+					</div>
 					<hr class="drawn">
-					<div class="genre">music for the being alive jive (mix of indie rock, folk, blues, electronic, and more)</div>
+					<div class="onair-genre">music for the being alive jive (mix of indie rock, folk, blues, electronic, and more)</div>
 				</div>
 			</div>
 		</div>
 
 		<div id="main">
 			<div class="main-navigation">
-<?php
-wp_nav_menu(array(
-	'menu' => 'Main Menu',
-	'container_id' => 'wizemenu',
-	'walker' => new CSS_Menu_Maker_Walker()
-));
-?>
+				<?php
+					wp_nav_menu(array(
+						'menu' => 'Main Menu',
+						'container_id' => 'wizemenu',
+						'walker' => new CSS_Menu_Maker_Walker()
+					));
+				?>
 
 				<?php
 				if (of_get_option('social_header', '1') == '1') {
 				?>
-						<div class="header-social">
-							 <ul id="footer-social">
-
+					<div class="header-social">
+						<ul id="footer-social">
+							<?php
+								$social_icons = array(
+									'facebook', 'twitter', 'digg', 'youtube',
+									'vimeo', 'rss', 'flickr', 'lastfm', 'pinterest',
+									'vk', 'google', 'amazon', 'beatport', 'instagram',
+									'myspace', 'mixcloud', 'soundcloud', 'resident',
+									'tumblr',
+								);
+								foreach( $social_icons as $si ) {
+									if ( of_get_option( $si ) != "") { ?>
+										<li class="<?= $si ?> footer-social">
+											<a href="<?= of_get_option($si) ?>" target="_blank"
+										></a></li><?php
+									}
+								}
+							?>
+						</ul>
+					</div><!-- end .header-social -->
 				<?php
-				if (of_get_option('facebook') != "") {
-				?>
-									<li class="facebook footer-social"><a href="<?php
-					echo of_get_option('facebook', 'no entry');
-				?>" target="_blank"></a></li><?php
 				}
 				?>
 
-				<?php
-				if (of_get_option('twitter') != "") {
-				?>
-									<li class="twitter footer-social"><a href="<?php
-					echo of_get_option('twitter');
-				?>" target="_blank"></a></li><?php
-				}
-				?>
-
-				<?php
-				if (of_get_option('digg') != "") {
-				?>
-									<li class="digg footer-social"><a href="<?php
-					echo of_get_option('digg');
-				?>" target="_blank"></a></li><?php
-				}
-				?>
-
-				<?php
-				if (of_get_option('youtube') != "") {
-				?>
-									<li class="youtube footer-social"><a href="<?php
-					echo of_get_option('youtube');
-				?>" target="_blank"></a></li><?php
-				}
-				?>
-
-				<?php
-				if (of_get_option('vimeo') != "") {
-				?>
-									<li class="vimeo footer-social"><a href="<?php
-					echo of_get_option('vimeo');
-				?>" target="_blank"></a></li><?php
-				}
-				?>
-
-				<?php
-				if (of_get_option('rss') != "") {
-				?>
-									<li class="rss footer-social"><a href="<?php
-					echo of_get_option('rss');
-				?>" target="_blank"></a></li><?php
-				}
-				?>
-
-				<?php
-				if (of_get_option('flickr') != "") {
-				?>
-									<li class="flickr1 footer-social"><a href="<?php
-					echo of_get_option('flickr');
-				?>" target="_blank"></a></li><?php
-				}
-				?>
-
-				<?php
-				if (of_get_option('lastfm') != "") {
-				?>
-									<li class="lastfm footer-social"><a href="<?php
-					echo of_get_option('lastfm');
-				?>" target="_blank"></a></li><?php
-				}
-				?>
-
-				<?php
-				if (of_get_option('pinterest') != "") {
-				?>
-									<li class="pinterest footer-social"><a href="<?php
-					echo of_get_option('pinterest');
-				?>" target="_blank"></a></li><?php
-				}
-				?>
-
-				<?php
-				if (of_get_option('vk') != "") {
-				?>
-									<li class="vk footer-social"><a href="<?php
-					echo of_get_option('vk');
-				?>" target="_blank"></a></li><?php
-				}
-				?>
-
-				<?php
-				if (of_get_option('google') != "") {
-				?>
-									<li class="google footer-social"><a href="<?php
-					echo of_get_option('google');
-				?>" target="_blank"></a></li><?php
-				}
-				?>
-
-				<?php
-				if (of_get_option('amazon') != "") {
-				?>
-									<li class="amazon footer-social"><a href="<?php
-					echo of_get_option('amazon');
-				?>" target="_blank"></a></li><?php
-				}
-				?>
-
-				<?php
-				if (of_get_option('beatport') != "") {
-				?>
-									<li class="beatport footer-social"><a href="<?php
-					echo of_get_option('beatport');
-				?>" target="_blank"></a></li><?php
-				}
-				?>
-
-				<?php
-				if (of_get_option('myspace') != "") {
-				?>
-									<li class="myspace footer-social"><a href="<?php
-					echo of_get_option('myspace');
-				?>" target="_blank"></a></li><?php
-				}
-				?>
-
-				<?php
-				if (of_get_option('instagram') != "") {
-				?>
-									<li class="instagram footer-social"><a href="<?php
-					echo of_get_option('instagram');
-				?>" target="_blank"></a></li><?php
-				}
-				?>
-
-				<?php
-				if (of_get_option('mixcloud') != "") {
-				?>
-									<li class="mixcloud footer-social"><a href="<?php
-					echo of_get_option('mixcloud');
-				?>" target="_blank"></a></li><?php
-				}
-				?>
-
-				<?php
-				if (of_get_option('soundcloud') != "") {
-				?>
-									<li class="soundcloud footer-social"><a href="<?php
-					echo of_get_option('soundcloud');
-				?>" target="_blank"></a></li><?php
-				}
-				?>
-
-				<?php
-				if (of_get_option('resident') != "") {
-				?>
-									<li class="resident footer-social"><a href="<?php
-					echo of_get_option('resident');
-				?>" target="_blank"></a></li><?php
-				}
-				?>
-
-				<?php
-				if (of_get_option('tumblr') != "") {
-				?>
-									<li class="tumblr footer-social"><a href="<?php
-					echo of_get_option('tumblr');
-				?>" target="_blank"></a></li><?php
-				}
-				?>
-
-			 </ul>
-	</div><!-- end .header-social -->
-	<?php
-	}
-	?>
-
-		</div><!-- end #main -->
+			</div><!-- end #main -->
 		</div><!-- end #header -->
 
-		</div><!-- end .main-navigation -->
-	</div>
+	</div><!-- end .main-navigation -->
+</div>
 <!-- Wrap -->
 <div class="wrap clearfix">
 <div id="wrcon">

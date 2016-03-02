@@ -341,3 +341,11 @@ function bbytes_likebox( $atts ) {
 	return ob_get_clean();
 }
 add_shortcode( 'bbytes-likebox', 'bbytes_likebox' );
+
+
+/*function toggle_mobile_menu() {
+	$(".mobile-menu-open").click(function() {
+		$("#menu").toggle();
+	});
+}
+add_action('wp_enqueue_scripts', 'toggle_mobile_menu');*/

@@ -436,7 +436,7 @@ hr.drawn {
 }
 
 @media (min-width: 415px) {
-	.mobile-number {
+	.mobile-stuff {
 		display: none;
 	}
 }
@@ -446,11 +446,28 @@ hr.drawn {
 		width: 100%;
 		padding-left: 60px;
 	}
-	.mobile-number {
-		text-align: center;
+	.mobile-stuff {
 		color: #f75c46;
 		margin-top: 20px;
 		font-size: 20px;
+		display: block;
+	}
+	.mobile-stuff #mobile-menu-container {
+		width: 20%;
+	}
+	.mobile-stuff #mobile-phone-container {
+		width: 80%;
+		text-align: right;
+	}
+	.mobile-stuff > div {
+		display: block;
+		float: left;
+	}
+	.mobile-menu-toggle {
+		display: none;
+	}
+	.mobile-menu-toggle.show {
+		display: block;
 	}
 }
 

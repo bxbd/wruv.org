@@ -184,6 +184,9 @@ if (of_get_option('active_player', '1') == '1') {
 					<hr class="drawn">
 					<div class="onair-genre">music for the being alive jive (mix of indie rock, folk, blues, electronic, and more)</div>
 				</div>
+				<div class="mobile-number">
+					<p><i class="fa fa-phone"></i><a href="tel:802-656-4399">  802-656-4399</a></p>
+				</div>
 			</div>
 		</div>
 

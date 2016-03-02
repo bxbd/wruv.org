@@ -404,6 +404,7 @@ hr.drawn {
 	height: 165px;
 }
 
+
 @media (max-width: 768px) {
 	#text-15 .textwidget {
 		background: transparent !important;
@@ -434,10 +435,22 @@ hr.drawn {
 	}
 }
 
+@media (min-width: 415px) {
+	.mobile-number {
+		display: none;
+	}
+}
+
 @media (max-width: 414px) {
 	.footer-bottom-social #footer-social {
 		width: 100%;
 		padding-left: 60px;
+	}
+	.mobile-number {
+		text-align: center;
+		color: #f75c46;
+		margin-top: 20px;
+		font-size: 20px;
 	}
 }
 

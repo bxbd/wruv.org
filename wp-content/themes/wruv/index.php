@@ -12,7 +12,7 @@ switch ($page_layout) {
 	
 	case "layout-sidebar-right":	
 		echo '
-	<div class="col-left-media">';
+	<div class="col-left-media clearfix">';
 	break;
 	
 	case "layout-full":

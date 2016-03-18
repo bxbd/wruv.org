@@ -407,11 +407,22 @@ hr.drawn {
 /*#main {
 	height: 0;
 }*/
+#text-18 .textwidget {
+	background: transparent !important;
+}
+
+.col-left-media {
+	width: 70%;
+}
+
+.bl2page {
+	float: left;
+}
+.mobile-stuff.clearfix {
+	display: none;
+}
 
 @media screen and (max-width: 768px) {
-	#text-15 .textwidget {
-		background: transparent !important;
-	}
 	#text-20 img {
 		width: 70px;
 		height: auto;
@@ -425,7 +436,7 @@ hr.drawn {
 		height: auto;
 	}
 	.footer-bottom-social #footer-social {
-		width: 40%;
+		width: 50%;
 		padding-bottom: 60px;
 	}
 	#footer .footer-row .footer-col {
@@ -457,12 +468,26 @@ hr.drawn {
 		width: auto;
 		float: right;
 		margin-top: 7px;
+		text-align:right;
 	}
-}
-
-@media (min-width: 415px) {
-	.mobile-stuff {
-		display: none;
+	.mobile-stuff.clearfix {
+		color: #f75c46;
+		margin-top: 20px;
+		font-size: 20px;
+		display: block;
+	}
+	#mobile-menu-container {
+		width: 20%;
+		float: left;
+	}
+	.col-left-media {
+		width: 100%;
+	}
+	#wizemenu {
+		width: 100%;
+	}
+	.bl2page {
+		float: none;
 	}
 }
 
@@ -471,24 +496,6 @@ hr.drawn {
 		width: 100%;
 		padding-left: 60px;
 	}
-	.mobile-stuff {
-		color: #f75c46;
-		margin-top: 20px;
-		font-size: 20px;
-		display: block;
-	}
-	.mobile-stuff #mobile-menu-container {
-		width: 20%;
-	}
-	.mobile-stuff #mobile-phone-container {
-		width: 80%;
-		text-align: right;
-	}
-	.mobile-stuff > div {
-		display: block;
-		float: left;
-	}
-
 }
 
 @media (max-width: 375px) {

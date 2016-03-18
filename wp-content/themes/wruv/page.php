@@ -47,7 +47,7 @@ if (strlen($location) > 2) {
 		</div><!-- end .content-right -->
 	</div>';
             echo '
-	<div class="sidebar-right">';
+	<div class="sidebar-right clearfix">';
             wz_setSection('zone-sidebar');
             if (!function_exists('dynamic_sidebar') || !dynamic_sidebar('sidebar-page'));
             echo '

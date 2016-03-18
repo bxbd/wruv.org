@@ -184,7 +184,7 @@ if (of_get_option('active_player', '1') == '1') {
 					<hr class="drawn">
 					<div class="onair-genre">music for the being alive jive (mix of indie rock, folk, blues, electronic, and more)</div>
 				</div>
-				<div class="mobile-stuff">
+				<div class="mobile-stuff clearfix">
 					<div id="mobile-menu-container">
 						<div class="mobile-menu-open "><i class="fa fa-bars"></i></div>
 					</div>

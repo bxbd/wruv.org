@@ -42,6 +42,7 @@
     .sidebar-right {
         width: 30%;
         padding-top: 0;
+        padding-right: 30px;
     }
     img {
         display: block;
@@ -213,7 +214,7 @@
         margin: 2%;
     }
     .bl2page {
-  width: 66%;
+  width: 85%;
   padding: 2%;
   float: left;
 }
@@ -291,8 +292,8 @@
         margin-top: 10px;
     }
     #content {
-        width: 100%;
-        float: left;
+        padding-left: 10px;
+        padding-right: 10px;
     }
     .title-head { text-align: center }
     .adpage1-col {
@@ -489,6 +490,10 @@
 
 /* phone */
 @media screen and (max-width:800px) { 
+    #content {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
     #shiftnav-toggle-main { min-width: 250px }
     #slider-large {
         width: 94%;
@@ -758,10 +763,6 @@
         float: none;
         margin: 0 auto;
         margin-top: 10px;
-    }
-    #content {
-        width: 100%;
-        float: left;
     }
     .title-head { text-align: center }
     .adpage1-col {

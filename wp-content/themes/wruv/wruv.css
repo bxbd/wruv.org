@@ -450,6 +450,14 @@ hr.drawn {
 		padding-bottom: 0;
 		margin-top: 0;
 	}
+	.mobile-menu-open i {
+		font-size: 36px;
+	}
+	#mobile-phone-container {
+		width: auto;
+		float: right;
+		margin-top: 7px;
+	}
 }
 
 @media (min-width: 415px) {

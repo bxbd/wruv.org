@@ -79,7 +79,6 @@
     }
     #main {
         width: 100%;
-        height: auto;
         float: left;
         background: url(../images/bg-trans.png        ) repeat scroll 0 0 rgba(0, 0, 0, 0);
     }
@@ -539,7 +538,6 @@
     }
     #main {
         width: 100%;
-        height: auto;
         float: left;
         background: url(../images/bg-trans.png) repeat scroll 0 0 rgba(0, 0, 0, 0);
     }

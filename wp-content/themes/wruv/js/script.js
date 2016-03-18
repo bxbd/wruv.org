@@ -156,10 +156,14 @@ $( document ).ready( function() {
 		doChatLogin(document.forms.loginForm);
 		$('#chat-area').slideToggle();
 	});
-})
+});
 function iterateMainVU() {
   var val = Math.floor( Math.random() * 80 + 1 ) - 45;
   $( '#needle' ).css('transform', 'rotateZ( '+val+'deg)');
 }
+
+$('.mobile-menu-open').click( function() {
+  $('.mobile-menu-toggle').toggleClass('toggle');
+});
 
 })(window.jQuery);

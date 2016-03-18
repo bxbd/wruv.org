@@ -404,8 +404,11 @@ hr.drawn {
 	height: 165px;
 }
 
+/*#main {
+	height: 0;
+}*/
 
-@media (max-width: 768px) {
+@media screen and (max-width: 768px) {
 	#text-15 .textwidget {
 		background: transparent !important;
 	}
@@ -432,6 +435,20 @@ hr.drawn {
 		display: block;
 		margin: 0 auto;
 		text-align: center;
+	}
+	#main.mobile-menu-toggle {
+		height: 333px;
+		padding: 10px 20px 6px;
+		-webkit-transition: all 2s ease;
+		transition: all 2s ease;
+		overflow: hidden;
+	}
+	#main.mobile-menu-toggle.toggle {
+		overflow: hidden;
+		height: 0;
+		padding-top: 0;
+		padding-bottom: 0;
+		margin-top: 0;
 	}
 }
 
@@ -463,12 +480,7 @@ hr.drawn {
 		display: block;
 		float: left;
 	}
-	.mobile-menu-toggle {
-		display: none;
-	}
-	.mobile-menu-toggle.show {
-		display: block;
-	}
+
 }
 
 @media (max-width: 375px) {

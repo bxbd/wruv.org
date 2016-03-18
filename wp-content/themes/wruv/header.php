@@ -186,7 +186,7 @@ if (of_get_option('active_player', '1') == '1') {
 				</div>
 				<div class="mobile-stuff">
 					<div id="mobile-menu-container">
-						<a href="#mobile-menu" class="mobile-menu-open"><i class="fa fa-bars"></i></a>
+						<div class="mobile-menu-open "><i class="fa fa-bars"></i></div>
 					</div>
 					<div id="mobile-phone-container">
 						<p>ON AIR: <a href="tel:802-656-4399">802-656-4399</a></p>
@@ -195,7 +195,7 @@ if (of_get_option('active_player', '1') == '1') {
 			</div>
 		</div>
 
-		<div id="main" class="mobile-menu-toggle">
+		<div id="main" class="mobile-menu-toggle toggle">
 			<div class="main-navigation">
 				<?php
 					wp_nav_menu(array(

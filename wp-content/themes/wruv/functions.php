@@ -343,9 +343,9 @@ function bbytes_likebox( $atts ) {
 add_shortcode( 'bbytes-likebox', 'bbytes_likebox' );
 
 
-/*function toggle_mobile_menu() {
+/*add_action('wp_enqueue_scripts', 'toggle_mobile_menu');
+function toggle_mobile_menu() {
 	$(".mobile-menu-open").click(function() {
 		$("#menu").toggle();
 	});
-}
-add_action('wp_enqueue_scripts', 'toggle_mobile_menu');*/
+}*/

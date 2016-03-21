@@ -20,6 +20,10 @@ add_action('wp', function() {
 	}
 });
 
+add_action( 'after_setup_theme', function() {
+	// enable featured images for posts, pages, and underwiters.
+	add_theme_support( 'post-thumbnails', array( 'post', 'page', 'underwriter') );
+} );
 
 /*** FUNCTIONS
  ****************************************************************/
@@ -341,11 +345,3 @@ function bbytes_likebox( $atts ) {
 	return ob_get_clean();
 }
 add_shortcode( 'bbytes-likebox', 'bbytes_likebox' );
-
-
-/*add_action('wp_enqueue_scripts', 'toggle_mobile_menu');
-function toggle_mobile_menu() {
-	$(".mobile-menu-open").click(function() {
-		$("#menu").toggle();
-	});
-}*/

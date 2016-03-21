@@ -23,7 +23,9 @@ switch ($page_layout) {
 echo '	
       <div class="title-head"><h1>';
 $category = get_the_category();
-echo $category[0]->cat_name;
+if ( count( $category ) > 0 ) {
+	echo $category[0]->cat_name;
+}
 echo '</h1></div>
       <div class="bl2page clearfix">';
 if (have_posts())

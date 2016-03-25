@@ -407,7 +407,9 @@ hr.drawn {
 /*#main {
 	height: 0;
 }*/
-#text-15 .textwidget {
+#text-15 .textwidget,
+#text-21 .textwidget,
+#text-18 .textwidget {
 	background: transparent !important;
 }
 
@@ -489,12 +491,29 @@ hr.drawn {
 	.bl2page {
 		float: none;
 	}
+	/*#lightning-phone {
+		height: 55px;
+		background-image: url('/wp-content/themes/wruv/images/top-nav_about.png');
+		background-repeat: no-repeat;
+		background-position: -18px 15px;
+	}*/
+	#lightning-phone i {
+		color: yellow;
+		padding-right: 5px;
+	}
+
 }
 
 @media (max-width: 414px) {
 	.footer-bottom-social #footer-social {
 		width: 100%;
 		padding-left: 60px;
+	}
+	.wpp-list .wpp-thumbnail {
+		display: none;
+	}
+	.list-nav .wpp-list li {
+		margin-bottom: 10px;
 	}
 }
 

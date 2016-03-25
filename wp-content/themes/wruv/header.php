@@ -189,7 +189,7 @@ if (of_get_option('active_player', '1') == '1') {
 						<div class="mobile-menu-open "><i class="fa fa-bars"></i></div>
 					</div>
 					<div id="mobile-phone-container">
-						<p>ON AIR: <a href="tel:802-656-4399">802-656-4399</a></p>
+						<div id="lightning-phone"><i class="fa fa-bolt"></i>ON AIR: <a href="tel:802-656-4399">802-656-4399</a></div>
 					</div>
 				</div>
 			</div>

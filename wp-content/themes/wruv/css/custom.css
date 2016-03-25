@@ -72,9 +72,9 @@ ul, ol {
 	  margin-right: 0px;
 	  margin: auto;
 	}
-	.adshr-col {
+	/*.adshr-col {
 	  margin: 22px !important;
-	}
+	}*/
 }
 
 @media screen and (max-width: 800px){
@@ -86,9 +86,6 @@ ul, ol {
 	}
 	.footer-bottom-copyright {
 	  padding: 15px !important;
-	}
-	.adshr-fix {
-	  margin: 0 !important;
 	}
 	div#text-15 .textwidget {
 	  padding: 15px;

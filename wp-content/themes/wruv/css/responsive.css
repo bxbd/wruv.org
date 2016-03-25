@@ -117,7 +117,7 @@
     }
     .title-home h3 { float: none }
     .bl1shr-col {
-        width: 94%;
+        width: 100%; 
         margin: 1%;
         padding: 2%;
     }

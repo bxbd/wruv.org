@@ -77,7 +77,7 @@ function wizedesign_load_javascript() {
   wp_enqueue_script( 'jquery-ui', 'https://code.jquery.com/ui/1.11.4/jquery-ui.min.js', array( 'jquery' ) );
 	wp_enqueue_script('flexslider', get_template_directory_uri() . '/js/flexslider.js', array( 'jquery' ), false, true );
 	wp_enqueue_script('fullwidthAudioPlayer', get_template_directory_uri() . '/js/fullwidthAudioPlayer.js', array( 'jquery' ), false, true );
-	wp_enqueue_script('jPlayerRadio', get_template_directory_uri() . '/js/jPlayerRadio.js', array( 'jquery' ), false, true );
+//	wp_enqueue_script('jPlayerRadio', get_template_directory_uri() . '/js/jPlayerRadio.js', array( 'jquery' ), false, true );
 	wp_enqueue_script('prettyPhoto', get_template_directory_uri() . '/js/prettyPhoto.js', array('jquery'), false, true );
 	wp_enqueue_script('backstretch', get_template_directory_uri() . '/js/backstretch.js', array('jquery'), false, true );
 	wp_enqueue_script('hoverex', get_template_directory_uri() . '/js/hoverex.js', array('jquery'), false, true );
@@ -89,8 +89,8 @@ function wizedesign_load_javascript() {
 	wp_enqueue_script('respond', get_template_directory_uri() . '/js/respond.js', array('jquery'), false, true );
 	wp_enqueue_script('script', get_template_directory_uri() . '/js/script.js', array('jquery'), false, true );
 	wp_enqueue_script('map', 'http://maps.googleapis.com/maps/api/js?sensor=false', array('jquery'), false, true );
-	wp_enqueue_script( 'jsjac', get_template_directory_uri() . '/js/jsjac.uncompressed.js', array( 'jquery' ), false, true );
-	wp_enqueue_script( 'jsjac-client', get_template_directory_uri() . '/js/jsjac-client.js', array( 'jquery', 'jquery-ui', 'jsjac' ), false, true );
+//	wp_enqueue_script( 'jsjac', get_template_directory_uri() . '/js/jsjac.uncompressed.js', array( 'jquery' ), false, true );
+//	wp_enqueue_script( 'jsjac-client', get_template_directory_uri() . '/js/jsjac-client.js', array( 'jquery', 'jquery-ui', 'jsjac' ), false, true );
   wp_enqueue_script( 'mediaelement', 'https://cdnjs.cloudflare.com/ajax/libs/mediaelement/2.19.0/mediaelement-and-player.min.js', array( 'jquery' ), false, true );
 }
 

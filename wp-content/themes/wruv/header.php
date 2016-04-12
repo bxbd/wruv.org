@@ -68,6 +68,12 @@ error_reporting(E_ALL);
 
 <!-- Wordpress functions -->
 <?php wp_head(); ?>
+<script src="<?php echo get_stylesheet_directory_uri() ?>/bower_components/jsxc/build/lib/jsxc.dep.min.js"></script>
+<script src="<?php echo get_stylesheet_directory_uri() ?>/bower_components/jsxc/build/jsxc.min.js"></script>
+<script>
+	
+</script>
+
 <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
 <link href='https://fonts.googleapis.com/css?family=Covered+By+Your+Grace' rel='stylesheet' type='text/css'>
 </head>
@@ -133,7 +139,7 @@ if (of_get_option('active_player', '1') == '1') {
 								<div id="chat_dialog" class="big-chat">
 								</div>
 								<form name="sendForm" onsubmit="return false" action="#">
-									<input type="text" size="30" name="msg" id="chat_sendmsg" placeholder="Start typing..." value=""></input>
+									<input type="text" size="30" name="msg" id="chat_sendmsg" placeholder="Start typing..." value="" onkeyup="chat_box_keyevent(event, sendMsg);"></input>
 								</form>
 							</div>
 						</div>

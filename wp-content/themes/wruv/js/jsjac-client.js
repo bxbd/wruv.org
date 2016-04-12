@@ -1,303 +1,181 @@
 var isIE = /*@cc_on!@*/false;
 
-//~ function add_to_dialog(from, msg) {
-   //~ var html += '<div class="msg"><b>' + from + ':</b>';
-   //~ document.getElementById('chat_dialog').innerHTML += html;
-//~ }
 
-function add_to_chat_output(html) {
-   document.getElementById('chat_dialog').innerHTML += html;
-   document.getElementById('chat_dialog').lastChild.scrollIntoView(false);
+function handleIQ(oIQ) {
+	document.getElementById('iResp').innerHTML += "<div class='msg'>IN (raw): " + oIQ.xml().htmlEnc() + '</div>';
+	document.getElementById('iResp').lastChild.scrollIntoView();
+	con.send(oIQ.errorReply(ERR_FEATURE_NOT_IMPLEMENTED));
 }
-
-function handleMessage(aJSJaCPacket) {
-   var html = '';
-   if( !aJSJaCPacket.getFrom().match(/^wruvdj@/i) ) {
-      return;
-   }
-   html += '<div class="msg msg-from"><b>DJ:</b> ';
-   if( aJSJaCPacket.isError() ) {
-      html += "I'm away right now, dial (802) 656-4399" + '</div>';
-   }
-   else {
-      html += aJSJaCPacket.getBody().htmlEnc() + '</div>';
-   }
-   add_to_chat_output(html);
+function handleMessage(oJSJaCPacket) {
+	var html = '';
+	html += '<div class="msg"><b>Received Message from ' + oJSJaCPacket.getFromJID() + ':</b><br/>';
+	html += oJSJaCPacket.getBody().htmlEnc() + '</div>';
+	document.getElementById('iResp').innerHTML += html;
+	document.getElementById('iResp').lastChild.scrollIntoView();
 }
-
-function handlePresence(aJSJaCPacket) {
-   //~ var html = '<div class="msg">';
-   //~ if (!aJSJaCPacket.getType() && !aJSJaCPacket.getShow())
-      //~ html += '<b>'+aJSJaCPacket.getFrom()+' has become available.</b>';
-   //~ else {
-      //~ html += '<b>'+aJSJaCPacket.getFrom()+' has set his presence to ';
-      //~ if (aJSJaCPacket.getType())
-         //~ html += aJSJaCPacket.getType() + '.</b>';
-      //~ else
-         //~ html += aJSJaCPacket.getShow() + '.</b>';
-      //~ if (aJSJaCPacket.getStatus())
-         //~ html += ' ('+aJSJaCPacket.getStatus().htmlEnc()+')';
-   //~ }
-   //~ html += '</div>';
-
-   //~ add_to_chat_output(html);
+function handlePresence(oJSJaCPacket) {
+	var html = '<div class="msg">';
+	if (!oJSJaCPacket.getType() && !oJSJaCPacket.getShow())
+		html += '<b>' + oJSJaCPacket.getFromJID() + ' has become available.</b>';
+	else {
+		html += '<b>' + oJSJaCPacket.getFromJID() + ' has set his presence to ';
+		if (oJSJaCPacket.getType())
+			html += oJSJaCPacket.getType() + '.</b>';
+		else
+			html += oJSJaCPacket.getShow() + '.</b>';
+		if (oJSJaCPacket.getStatus())
+			html += ' (' + oJSJaCPacket.getStatus().htmlEnc() + ')';
+	}
+	html += '</div>';
+	document.getElementById('iResp').innerHTML += html;
+	document.getElementById('iResp').lastChild.scrollIntoView();
 }
-
 function handleError(e) {
-   chat_error( "An error occured:\n"+
-      ("Code: "+e.getAttribute('code')+"\nType: "+e.getAttribute('type')+
-      "\nCondition: "+e.firstChild.nodeName)
-   );;
-   activate_login_pane();
-
-   if (con.connected())
-      con.disconnect();
+	document.getElementById('err').innerHTML = "An error occured:<br />" + ("Code: " + e.getAttribute('code') + "\nType: " + e.getAttribute('type') + "\nCondition: " + e.firstChild.nodeName).htmlEnc();
+	document.getElementById('login_pane').style.display = '';
+	document.getElementById('sendmsg_pane').style.display = 'none';
+	if (con.connected())
+		con.disconnect();
 }
-
 function handleStatusChanged(status) {
-   oDbg.log("status changed: "+status);
+	oDbg.log("status changed: " + status);
 }
-
-function handleConnected(nomsg) {
-   //~ activate_chat_pane("<span class='chat_connected'>DJ CHAT, <span class='chat_as'>as " + con.username + "</span></span>");
-   activate_chat_pane("<span class='chat_connected'>DJ CHAT, connected</span>", true);
-   //~ activate_chat_pane("<span class='chat_connected'>" + con.username + " connected</span>");
-   if( !nomsg ) {
-      //~ dispatch_msg( '** Listener "' + con.username + '" has opened a chat from the website' );
-      document.getElementById('chat_sendmsg').focus();
-   }
-   con.send(new JSJaCPresence());
+function handleConnected() {
+	document.getElementById('login_pane').style.display = 'none';
+	document.getElementById('sendmsg_pane').style.display = '';
+	document.getElementById('err').innerHTML = '';
+	con.send(new JSJaCPresence());
 }
-
 function handleDisconnected() {
-   activate_login_pane();
+	document.getElementById('login_pane').style.display = '';
+	document.getElementById('sendmsg_pane').style.display = 'none';
+}
+function handleIqVersion(iq) {
+	con.send(iq.reply([iq.buildNode('name', 'jsjac simpleclient'), iq.buildNode('version', JSJaC.Version), iq.buildNode('os', navigator.userAgent)]));
+	return true;
+}
+function handleIqTime(iq) {
+	var now = new Date();
+	con.send(iq.reply([iq.buildNode('display', now.toLocaleString()), iq.buildNode('utc', now.jabberDate()), iq.buildNode('tz', now.toLocaleString().substring(now.toLocaleString().lastIndexOf(' ') + 1))]));
+	return true;
 }
 
 function chat_box_keyevent(e, fcn) {
    if( isIE ) {
-      if( e.keyCode == 13 ) fcn(e.srcElement.form);
+	  if( e.keyCode == 13 ) fcn(e.srcElement.form);
    }
    else {
-      if( e.keyCode == 13 ) fcn(e.target.form);
+	  if( e.keyCode == 13 ) fcn(e.target.form);
    }
 }
 
-function doChatLogin(aForm) {
-   chat_error( '' ); // reset
-   //~ var first_msg = aForm.username.value;
+function doChatLogin(oForm) {
+	var actual_username = 'www' + (Math.random()+'').substring(3,8);
 
-   var actual_username = 'www' + (Math.random()+'').substring(3,8);
-
-   //~ if( aForm.username.value == '' ) {
-      //~ aForm.username.value = "Enter Name";
-      //~ return;
-   //~ }
-   //~ else if( aForm.username.value == 'Enter Name' ) {
-      //~ return;
-   //~ }
-
-   //~ var their_username = aForm.username.value;
-   //~ var actual_username = their_username.replace(/[^a-z0-9]/ig, '_').substr(0,20);
-
-   try {
-      // setup args for contructor
-      /*oArgs = new Object();
-      var loc = window.location;
-      oArgs.httpbase = loc.protocol + '//' + loc.host + '/http-bind/';
-      // oArgs.httpbase = 'https://wruv.org/http-bind/';
-      oArgs.timerval = 2000;
-
-      if (typeof(oDbg) != 'undefined')
-         oArgs.oDbg = oDbg;
-
-      //~ if (aForm.backend[0].checked)
-         con = new JSJaCHttpBindingConnection(oArgs);
-      //~ else
-         //~ con = new JSJaCHttpPollingConnection(oArgs);
-
-      setupCon(con);*/
-
-
-      // setup args for connect method
-      oArgs = new Object();
-      oArgs.domain = "chat.wruv.org";
-      var loc = window.location;
-      oArgs.timerval = 2000;
-      oArgs.httpbase = loc.protocol + '//chat.wruv.org/http-bind/';
-      oArgs.username = actual_username;
-      //~ oArgs.given_username = their_username;
-      oArgs.resource = '<3';
-      oArgs.pass = '';
-      oArgs.register = false;
-      con = new JSJaCHttpBindingConnection(oArgs);
-      setupCon(con);
-      con.connect(oArgs);
-
-      activate_chat_pane('Connecting...', false);
-      document.getElementById('chat_sendmsg').focus();
-   } catch (e) {
-      chat_error( e.toString() );
-   } finally {
-      return false;
-   }
-
-   return false;
+	// document.getElementById('err').innerHTML = '';
+	// reset
+	try {
+		if (oForm.http_base.value.substr(0, 5) === 'ws://' || oForm.http_base.value.substr(0, 6) === 'wss://') {
+			con = new JSJaCWebSocketConnection({
+				httpbase : oForm.http_base.value,
+				oDbg : oDbg
+			});
+		} else {
+			con = new JSJaCHttpBindingConnection({
+				httpbase : oForm.http_base.value,
+				oDbg : oDbg
+			});
+		}
+		setupCon(con);
+		// setup args for connect method
+		oArgs = new Object();
+		oArgs.domain = oForm.server.value;
+		oArgs.username = actual_username;
+		// oArgs.username = oForm.username.value;
+		oArgs.resource = 'jsjac_simpleclient';
+		oArgs.pass = oForm.password.value;
+		oArgs.register = oForm.register.checked;
+		con.connect(oArgs);
+	} catch (e) {
+		document.getElementById('err').innerHTML = e.toString();
+	} finally {
+		return false;
+	}
 }
-
-function setupCon(con) {
-      con.registerHandler('message',handleMessage);
-      con.registerHandler('presence',handlePresence);
-      //~ con.registerHandler('iq',handleIQ);
-      con.registerHandler('onconnect',handleConnected);
-      con.registerHandler('onerror',handleError);
-      con.registerHandler('status_changed',handleStatusChanged);
-      con.registerHandler('ondisconnect',handleDisconnected);
-
-      //~ con.registerIQGet('query', NS_VERSION, handleIqVersion);
-      //~ con.registerIQGet('query', NS_TIME, handleIqTime);
+function setupCon(oCon) {
+	oCon.registerHandler('message', handleMessage);
+	oCon.registerHandler('presence', handlePresence);
+	oCon.registerHandler('iq', handleIQ);
+	oCon.registerHandler('onconnect', handleConnected);
+	oCon.registerHandler('onerror', handleError);
+	oCon.registerHandler('status_changed', handleStatusChanged);
+	oCon.registerHandler('ondisconnect', handleDisconnected);
+	oCon.registerIQGet('query', NS_VERSION, handleIqVersion);
+	oCon.registerIQGet('query', NS_TIME, handleIqTime);
 }
-
-function dispatch_msg(msg) {
-   var sendto = 'WRUVDJ@' + con.domain;
-
-   var aMsg = new JSJaCMessage();
-   aMsg.setTo(new JSJaCJID(sendto));
-   aMsg.setBody(msg);
-   con.send(aMsg);
+function sendMsg(oForm) {
+	if (oForm.msg.value == '') // || oForm.sendTo.value == '')
+		return false;
+	// if (oForm.sendTo.value.indexOf('@') == -1)
+	// 	oForm.sendTo.value += '@' + con.domain;
+	try {
+		var oMsg = new JSJaCMessage();
+		var sendto = 'WRUVDJ_test@' + con.domain;
+		oMsg.setTo(new JSJaCJID(sendto));
+		oMsg.setBody(oForm.msg.value);
+		con.send(oMsg);
+		oForm.msg.value = '';
+		return false;
+	} catch (e) {
+		html = "<div class='msg error''>Error: " + e.message + "</div>";
+		document.getElementById('iResp').innerHTML += html;
+		document.getElementById('iResp').lastChild.scrollIntoView();
+		return false;
+	}
 }
-
-function sendMsg(form, no_output) {
-   var msg = form.msg.value;
-   if (msg == '')
-      return false;
-
-   form.msg.value = '';
-   try {
-      dispatch_msg(msg);
-
-      var html = '<div class="msg msg-to"><b><i>ME:</b></i> ' + msg + '</div>';
-      //~ var html = '<div class="msg"><b><i>' + con.username + '</b></i>: ' + msg + '</div>';
-      add_to_chat_output(html);
-
-
-      return false;
-   } catch (e) {
-      html = "<div class='msg error''>Error: "+e.message+"</div>";
-      add_to_chat_output(html);
-      return false;
-   }
+function quit() {
+	var p = new JSJaCPresence();
+	p.setType("unavailable");
+	con.send(p);
+	con.disconnect();
+	document.getElementById('login_pane').style.display = '';
+	document.getElementById('sendmsg_pane').style.display = 'none';
 }
-
-function doChatLogout() {
-   activate_login_pane();
-
-   window.setTimeout(function() {
-      //~ dispatch_msg( '** Listener "' + con.username + '" has closed the chat box' );
-
-      var p = new JSJaCPresence();
-      p.setType("unavailable");
-      con.send(p);
-      con.disconnect();
-
-   }, 50);
-}
-
 function init() {
-   if (typeof(Debugger) == 'function') {
-      oDbg = new Debugger(2,'simpleclient');
-      oDbg.start();
-   } else {
-      // if you're using firebug or safari, use this for debugging
-      //oDbg = new JSJaCConsoleLogger(2);
-      // comment in above and remove comments below if you don't need debugging
-      oDbg = function() {};
-      oDbg.log = function() {};
-   }
-
-
-   try { // try to resume a session
-      //~ if (JSJaCCookie.read('btype').getValue() == 'binding')
-         con = new JSJaCHttpBindingConnection({'oDbg':oDbg});
-      //~ else
-         //~ con = new JSJaCHttpPollingConnection({'oDbg':oDbg});
-
-      setupCon(con);
-
-      if (con.resume()) {
-         chat_error( '' );
-         handleConnected(1);
-      }
-      else {
-         activate_login_pane();
-      }
-   } catch (e) {
-      activate_login_pane();
-   } // reading cookie failed - never mind
-
+	oDbg = new JSJaCConsoleLogger(4);
+	try {// try to resume a session
+		con = new JSJaCHttpBindingConnection({
+			'oDbg' : oDbg
+		});
+		setupCon(con);
+		if (con.resume()) {
+			document.getElementById('login_pane').style.display = 'none';
+			document.getElementById('sendmsg_pane').style.display = '';
+			document.getElementById('err').innerHTML = '';
+		}
+	} catch (e) {
+	} // reading cookie failed - never mind
 }
-
-function activate_chat_pane(msg, allow_send) {
-   document.getElementById('chat_login_pane').style.display = 'none';
-
-   var cpane = document.getElementById('chat_sendmsg_pane');
-   cpane.style.display = '';
-   document.getElementById('chat_sendmsg').disabled = !allow_send;
-   document.getElementById('chat_dialog').innerHTML = msg ? msg + '<br/>' : '&nbsp;';
-   make_dialog_resizeable();
-
-}
-
-function make_dialog_resizeable() {
-   if( typeof($) != 'undefined' ) { // jquery is on
-      $('#chat_sendmsg_pane.big-chat').resizable({
-         //grid : [40, 0],
-         minWidth : 520,
-         maxWidth : 520,
-         minHeight : 90,
-         alsoResize: '#chat_dialog.big-chat'
-         //~ maxWidth: 550
-      });
-   }
-
-}
-
-function activate_login_pane() {
-   document.getElementById('chat_login_pane').style.display = '';
-   document.getElementById('chat_sendmsg_pane').style.display = 'none';
-}
-
 onload = init;
-
-onerror = function(e) {
-   chat_error( e );
-
-   alert(e);
-
-   document.getElementById('chat_login_pane').style.display = '';
-   document.getElementById('chat_sendmsg_pane').style.display = 'none';
-
-   if (con && con.connected())
-      con.disconnect();
-   return false;
+//onerror = function(e) {
+//  document.getElementById('err').innerHTML = e;
+//
+//  document.getElementById('login_pane').style.display = '';
+//  document.getElementById('sendmsg_pane').style.display = 'none';
+//
+//  if (con && con.connected())
+//    con.disconnect();
+//  return false;
+//};
+onunload = function() {
+	if ( typeof con != 'undefined' && con && con.connected()) {
+		// save backend type
+		if (con._hold)// must be binding
+			(new JSJaCCookie('btype', 'binding')).write();
+		else
+			(new JSJaCCookie('btype', 'polling')).write();
+		if (con.suspend) {
+			con.suspend();
+		}
+	}
 };
-
-function jsjac_onunload() {
-   // save the cookie with only the name, and just reconnect, don't do this suspending.
-   // what to do about having the site open in
-   if (typeof con != 'undefined' && con && con.connected()) {
-   // save backend type
-      //~ if (con._hold) // must be binding
-         (new JSJaCCookie('btype','binding')).write();
-      //~ else
-         //~ (new JSJaCCookie('btype','polling')).write();
-      if (con.suspend) {
-         con.suspend();
-      }
-   }
-};
-onbeforeunload = jsjac_onunload;
-
-function chat_error(msg) {
-   if( msg == '' ) return;
-   if( typeof(console) != 'undefined' ) console.log("CHAT ERROR: " + msg);
-}

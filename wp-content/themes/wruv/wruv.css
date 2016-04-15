@@ -260,19 +260,45 @@ hr.drawn {
 /*
 #chat-button,#chat-label {
 	width: 30%;
-}*/
+}
+*/
 
+.chat-loading {
+	text-align: center;
+	position: relative;
+	top: -64%;
+	left: -8%;
+}
+.chat-loading > i {
+	font-size: 40px;
+	position: absolute;
+}
+#sendmsg_pane {
+	padding-top: 6px;
+}
 #chat-area {
-	height: 100%;
-	background: #fff;
+	height: 160px;
+	background: #E3E2E3;
+	opacity: 0.9;
 	border-radius: 10px;
 	border-bottom-right-radius: 0;
 	border-bottom-left-radius: 0;
-	margin: 0 8px;
+	margin: 2px 8px;
 	padding: 5px 10px;
 	box-sizing: border-box;
 	position: relative;
-	text-align: center;
+}
+
+#chat_dialog {
+	height: 130px;
+	overflow-y: scroll;
+}
+
+#chat-input {
+	border: 2px solid #808080;
+	width: 100%;
+	background: #FFF;
+	opacity: 1;
 }
 
 #chat-loader {

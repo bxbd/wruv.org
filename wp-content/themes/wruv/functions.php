@@ -345,3 +345,5 @@ function bbytes_likebox( $atts ) {
 	return ob_get_clean();
 }
 add_shortcode( 'bbytes-likebox', 'bbytes_likebox' );
+
+include_once( __DIR__ . '/includes/wruv-schedule.php' );

@@ -114,30 +114,34 @@ if (of_get_option('active_player', '1') == '1') {
 				</div><!-- end #logo -->
 			</div>
 			<div class="header-col col-2">
-				<div class="tapeman-container">
-					<div id="tapeman-chat" class="big-chat">
-						<div id="concealed-player">
-							<audio id="main-player" width="200" height="25" src="http://icecast.uvm.edu:8005/wruv_fm_128" type="audio/mpeg"></audio>
-						</div>
-						<div id="chat-area" style="display:none;">
-							<div id="chat-loader">
-								<i id="chat-loader-spinner" class="fa fa-spinner fa-spin fa-4x"></i><br>
-								<span class="loading-message">Connecting...</span>
-							</div>
-							<div id="chat_login_pane" style="display: none;">
-								<form name="loginForm" onsubmit="return false;" action="#">
-								</form>
-							</div>
+				<script>
+					jQuery(document).ready(function($) {
+						$('#chat-label, #chat-button').click( function() {
+							$('.chat-loading').show();
+							toggleChatLogin();
+							return false;
+						});
 
-							<div id="chat_sendmsg_pane" class="big-chat">
-								<div id="chat_dialog" class="big-chat">
-								</div>
-								<form name="sendForm" onsubmit="return false" action="#">
-									<input type="text" size="30" name="msg" id="chat_sendmsg" placeholder="Start typing..." value=""></input>
-								</form>
+						$('#chat-input').keypress( function(e) {
+							if( e.which == 13 ) {
+								sendChatMsg($(this).val());
+								return false;
+							}
+						});
+					}, $);
+				</script>
+				<div class="tapeman-container">
+
+					<div id="tapeman-chat" class="big-chat">
+						<div id="sendmsg_pane" style="display:none;">
+							<div id="chat-area">
+								<div id="chat_dialog"></div>
+								<input name="msg" id='chat-input' rows="3" cols="80" tabindex="2" placeholder="type to chat...">
 							</div>
 						</div>
+						<div class="chat-loading"><i class="fa fa-spin fa-circle-o-notch"></i></div>
 					</div>
+
 					<div class="tapedeck-controls">
 						<span class="tape-label" id="chat-label">
 							DJ Chat
@@ -152,7 +156,7 @@ if (of_get_option('active_player', '1') == '1') {
 							Stream
 						</span>
 						<div class="inner">
-							<a href="#" class="tape-button" id="chat-button" onclick="doChatLogin(document.forms.loginForm); return false;"><i class="fa fa-comment-o"></i></a>
+							<a href="#" class="tape-button" id="chat-button"><i class="fa fa-comment-o"></i></a>
 							<a href="#" class="tape-button"><i class="fa fa-external-link"></i></a>
 							<a href="#" id="play-pause-button" class="tape-button"><i class="fa fa-play"></i></a>
 							<div id="multiplayer" class="tape-button">

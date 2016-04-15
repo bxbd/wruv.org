@@ -68,8 +68,8 @@ error_reporting(E_ALL);
 
 <!-- Wordpress functions -->
 <?php wp_head(); ?>
-<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
-<link href='https://fonts.googleapis.com/css?family=Covered+By+Your+Grace' rel='stylesheet' type='text/css'>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mediaelement/2.19.0/mediaelement-and-player.js"></script>
 </head>
 
 
@@ -131,7 +131,6 @@ if (of_get_option('active_player', '1') == '1') {
 					}, $);
 				</script>
 				<div class="tapeman-container">
-
 					<div id="tapeman-chat" class="big-chat">
 						<div id="sendmsg_pane" style="display:none;">
 							<div id="chat-area">

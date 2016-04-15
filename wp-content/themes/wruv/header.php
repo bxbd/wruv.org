@@ -69,7 +69,7 @@ error_reporting(E_ALL);
 <!-- Wordpress functions -->
 <?php wp_head(); ?>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mediaelement/2.19.0/mediaelement-and-player.js"></script>
+
 </head>
 
 

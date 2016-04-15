@@ -61,7 +61,7 @@ function handleStatusChanged(status) {
 function handleConnected() {
 	// document.getElementById('login_pane').style.display = 'none';
 	document.getElementById('sendmsg_pane').style.display = '';
-	document.getElementById('err').innerHTML = '';
+	// document.getElementById('err').innerHTML = '';
 	con.send(new JSJaCPresence());
 }
 function handleDisconnected() {
@@ -77,9 +77,12 @@ function handleIqTime(iq) {
 	con.send(iq.reply([iq.buildNode('display', now.toLocaleString()), iq.buildNode('utc', now.jabberDate()), iq.buildNode('tz', now.toLocaleString().substring(now.toLocaleString().lastIndexOf(' ') + 1))]));
 	return true;
 }
-function doChatLogin() {
-	// document.getElementById('err').innerHTML = '';
-	// reset
+function toggleChatLogin() {
+	if (con.connected()) {
+		quitChat();
+		return;
+	}
+
 	try {
 		var http_base = 'http://' + window.location.host + '/http-bind/';
 		if (http_base.substr(0, 5) === 'ws://' || http_base.substr(0, 6) === 'wss://') {
@@ -145,7 +148,7 @@ function sendChatMsg(msg) {
 		return false;
 	}
 }
-function quit() {
+function quitChat() {
 	var p = new JSJaCPresence();
 	p.setType("unavailable");
 	con.send(p);
@@ -154,7 +157,7 @@ function quit() {
 	document.getElementById('sendmsg_pane').style.display = 'none';
 }
 function init() {
-	oDbg = new JSJaCConsoleLogger(4);
+	oDbg = new JSJaCConsoleLogger(0);
 	try {// try to resume a session
 		con = new JSJaCHttpBindingConnection({
 			'oDbg' : oDbg
@@ -163,6 +166,7 @@ function init() {
 		if (con.resume()) {
 			// document.getElementById('login_pane').style.display = 'none';
 			document.getElementById('sendmsg_pane').style.display = '';
+			jQuery('.chat-loading').hide();
 			// document.getElementById('err').innerHTML = '';
 		}
 	} catch (e) {

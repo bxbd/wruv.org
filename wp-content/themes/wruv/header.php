@@ -117,17 +117,14 @@ if (of_get_option('active_player', '1') == '1') {
 				<script>
 					jQuery(document).ready(function($) {
 						$('#chat-label, #chat-button').click( function() {
-							console.log('!!');
-							doChatLogin();
+							$('.chat-loading').show();
+							toggleChatLogin();
 							return false;
 						});
 
 						$('#chat-input').keypress( function(e) {
 							if( e.which == 13 ) {
-								console.log('!!');
 								sendChatMsg($(this).val());
-								$(this).val('');
-								console.log($(this).val());
 								return false;
 							}
 						});
@@ -135,49 +132,16 @@ if (of_get_option('active_player', '1') == '1') {
 				</script>
 				<div class="tapeman-container">
 
-<!--
-		<div id="login_pane">
-				<input type="hidden" name="http_base" id="http_base" tabindex="3" value="/http-bind/"/>
-				<input type="hidden" name="server" id="server" tabindex="4" value="chat.barbershop.wruv.org"/>
-				<input type="submit" value="Login" tabindex="7">
-		</div>
-	-->
-
-		<div id="tapeman-chat" class="big-chat">
-			<div id="sendmsg_pane" style="display:none;">
-				<div id="chat-area">
-					<div id="chat_dialog"></div>
-					<input name="msg" id='chat-input' rows="3" cols="80" tabindex="2" placeholder="type to chat...">
-				</div>
-
-
-				<!-- <div class="spaced">
-					<input type="submit" value="Send" tabindex="3">
-					/
-					<input type="button" value="Quit" tabindex="4" onclick="return quit();">
-				</div> -->
-			</div>
-		</div>
-						<!--
 					<div id="tapeman-chat" class="big-chat">
-						<div id="concealed-player">
-							<audio id="main-player" width="200" height="25" src="http://icecast.uvm.edu:8005/wruv_fm_128" type="audio/mpeg"></audio>
-						</div>
-						<div id="chat-area" class="">
-							<! --<div id="chat-loader">
-								<i id="chat-loader-spinner" class="fa fa-spinner fa-spin fa-4x"></i><br>
-								<span class="loading-message">Connecting...</span>
-							</div> - ->
-							<div id="sendmsg_pane" class="big-chat">
-								<div id="chat_dialog" class="big-chat">
-								</div>
-								<form name="sendForm" action="#">
-									<input type="text" size="30" name="msg" id="chat_sendmsg" placeholder="Start typing..." value=""></input>
-								</form>
+						<div id="sendmsg_pane" style="display:none;">
+							<div id="chat-area">
+								<div id="chat_dialog"></div>
+								<input name="msg" id='chat-input' rows="3" cols="80" tabindex="2" placeholder="type to chat...">
 							</div>
 						</div>
+						<div class="chat-loading"><i class="fa fa-spin fa-circle-o-notch"></i></div>
 					</div>
-				-->
+
 					<div class="tapedeck-controls">
 						<span class="tape-label" id="chat-label">
 							DJ Chat

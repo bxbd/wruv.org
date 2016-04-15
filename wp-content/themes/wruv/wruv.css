@@ -262,10 +262,19 @@ hr.drawn {
 	width: 30%;
 }
 */
-#sendmsg_pane {
-	height: 100%;
+
+.chat-loading {
+	text-align: center;
 	position: relative;
-	top: 6px;
+	top: -64%;
+	left: -8%;
+}
+.chat-loading > i {
+	font-size: 40px;
+	position: absolute;
+}
+#sendmsg_pane {
+	padding-top: 6px;
 }
 #chat-area {
 	height: 160px;

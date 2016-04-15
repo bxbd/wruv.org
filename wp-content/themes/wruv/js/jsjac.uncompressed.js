@@ -1825,7 +1825,10 @@ function JSJaCConsoleLogger(level) {
    * denotes an error in the usual protocol flow.
    */
   this.log = function(msg, level) {
+	return;
+	
 	level = level || 0;
+	console.log(level);
 	if (level > this.level)
 	  return;
 	if (typeof(console) == 'undefined')

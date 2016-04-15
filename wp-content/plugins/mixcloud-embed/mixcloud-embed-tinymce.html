@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>Mixcloud Embed</title>
+    <script type="text/javascript">
+        // <![CDATA[
+        !function () {
+            var data = window.top.mixcloudEmbedDialogData
+                    , loadJS = function (path) {
+                        document.write('<script type="text/javascript" src="' + path + '"><\/script>');
+                    }
+                    , loadCSS = function (path) {
+                        document.write('<link rel="stylesheet" type="text/css" href="' + path + '" \/>');
+                    };
+
+            // Load CSS and JS
+            loadCSS(data.pluginsUrl + '/mixcloud-embed/bootstrap-1.4.0.min.css?v=' + data.pluginVersion);
+            loadJS(data.includesUrl + 'js/tinymce/tiny_mce_popup.js?v=' + data.pluginVersion);
+        }();
+        // ]]>
+    </script>
+    <script type="text/javascript">
+        // <![CDATA[
+        tinyMCEPopup.onInit.add(function (ed) {
+            var form = window.document.forms[0],
+
+                    isEmpty = function (value) {
+                        return (/^\s*$/.test(value));
+                    },
+
+                    encodeStr = function (value) {
+                        return value.replace(/\s/g, "%20")
+                                .replace(/"/g, "%22")
+                                .replace(/'/g, "%27")
+                                .replace(/=/g, "%3D")
+                                .replace(/\[/g, "%5B")
+                                .replace(/\]/g, "%5D")
+                                .replace(/\//g, "%2F");
+                    },
+
+                    insertShortcode = function (e) {
+                        var shortcode = "", params = " ",
+                                inputs = form.elements, input, inputName, inputValue,
+                                l = inputs.length, i = 0, cloudcastUrl = "";
+
+                        for (; i < l; i++) {
+                            input = inputs[i];
+                            inputName = input.name;
+                            inputValue = input.value;
+
+                            // Video URL or ID validation
+                            if (inputName == "url") {
+                                if (isEmpty(inputValue)) {
+                                    alert("You need to introduce at least a Cloudcast URL.");
+                                    return false;
+                                } else {
+                                    cloudcastUrl = inputValue;
+                                    continue;
+                                }
+                            }
+                            if (inputName == "iframe"){
+                                if (inputValue == 1) inputValue = "true";
+                                else inputValue = "false";
+                            }
+                            if (inputName == "playlist"){
+                                if (inputValue == 1) inputValue = "true";
+                                else inputValue = "false";
+                            }
+                            if (inputName != "" ){
+                                params += inputName + "=\"" + inputValue + "\" ";
+                            }
+
+
+
+                        }
+
+                        shortcode = "[mixcloud" + params + "]" + cloudcastUrl + "[/mixcloud]";
+
+                        ed.execCommand('mceInsertContent', 0, shortcode);
+                        tinyMCEPopup.close();
+
+                        return false;
+                    };
+
+            form.onsubmit = insertShortcode;
+
+            tinyMCEPopup.resizeToInnerSize();
+        });
+        // ]]>
+    </script>
+    <style type="text/css">
+        html, body {
+            background-color: #fff !important;
+            font-size: 13px !important;
+        }
+
+        .form-stacked {
+            padding-left: 0;
+        }
+
+        .form-stacked fieldset {
+            border: none;
+            font-size: 13px;
+        }
+
+        .help-inline, .help-block {
+            font-size: 10px;
+        }
+
+        .form-stacked fieldset legend {
+            color: #2B6FB6;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .form-stacked span[class*="span"] {
+            display: inline-block
+        }
+
+        .form-stacked .actions {
+            margin-left: 0
+        }
+
+        .form-stacked div.label {
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            font-weight: normal;
+            line-height: 20px;
+            text-align: left;
+            width: auto;
+            color: #404040;
+            font-size: 13px;
+            white-space: normal;
+        }
+
+        .form-stacked .inputs-list:first-child {
+            padding-top: 0;
+        }
+
+        .form-stacked .deprecated {
+            font-style: italic;
+            color: orange
+        }
+
+        .form-stacked .required {
+            color: red
+        }
+    </style>
+</head>
+<body>
+
+<form class="form-stacked" action="#">
+
+
+    <fieldset>
+        <legend>Mixcloud Embed</legend>
+        <div class="clearfix">
+            <ul class="inputs-list">
+                <li>
+                    <label>
+                        <span class="span2">Cloudcast/Profile <span class="required">*</span></span>
+                        <input type="text" name="url" class="span4"/>
+                        <span class="help-inline">Cloudcast URL or Profile URL</span>
+                    </label>
+                </li>
+
+            </ul>
+        </div>
+    </fieldset>
+    <fieldset>
+        <legend>Property</legend>
+        <div class="clearfix">
+            <ul class="inputs-list">
+                <li>
+                    <label>
+                        <span class="span2">Width <span class="required">*</span></span>
+                        <input type="text" name="width" class="span4"/>
+                        <span class="help-inline">px or %</span>
+                    </label>
+                </li>
+                <li>
+                    <label>
+                        <span class="span2">Height <span class="required">*</span></span>
+                        <input type="text" name="height" class="span4"/>
+                        <span class="help-inline">px or %</span>
+                    </label>
+                </li>
+                <li>
+                    <label>
+                        <input type="checkbox" name="cover" value="1"/>
+                        <span class="span2">Show Cover</span>
+                        <span class="help-inline">View the cover of cloudcast</span>
+                    </label>
+                </li>
+                <li>
+                    <label>
+                        <input type="checkbox" name="mini" value="1"/>
+                        <span class="span2">Mini Player</span>
+                        <span class="help-inline">View only essential controls</span>
+                    </label>
+                </li>
+                <li>
+                    <label>
+                        <input type="checkbox" name="light" value="1"/>
+                        <span class="span2">Light Widget</span>
+                        <span class="help-inline">Light color of embed controller</span>
+                    </label>
+                </li>
+                <li>
+                    <label>
+                        <input type="checkbox" name="autoplay" value="1"/>
+                        <span class="span2">Autoplay</span>
+                        <span class="help-inline">Autoplay a cloudcast</span>
+                    </label>
+                </li>
+                <li>
+                    <label>
+                        <input type="checkbox" name="tracklist" value="1"/>
+                        <span class="span2">Show Tracklist</span>
+                        <span class="help-inline">Show the tracklist</span>
+                    </label>
+                </li>
+                <li>
+                    <label>
+                        <input type="checkbox" name="artwork" value="1"/>
+                        <span class="span2">Show Artwork</span>
+                        <span class="help-inline">View a artwork of cloudcast</span>
+                    </label>
+                </li>
+                <li>
+                    <label>
+                        <input type="checkbox" name="iframe" value="1"/>
+                        <span class="span2">HTML5 Mode </span>
+                        <span class="help-inline">iframe or flash object rendering</span>
+                    </label>
+                </li>
+
+            </ul>
+        </div>
+    </fieldset>
+    <div class="actions">
+        <input type="submit" value="Insert shortcode" class="btn primary"/>
+        or
+        <input class="btn" type="reset" value="Reset settings"/>
+    </div>
+</form>
+</body>
+</html>    

@@ -1,0 +1,17 @@
+.mixcloud-embed-playlist li{
+    display: block;
+    height: 30px;
+    width: 100%;
+}
+.mixcloud-embed-playlist li .mixcloud-embed-position{
+    font-size: 18px;
+    font-weight: bold;
+}
+.mixcloud-embed-playlist li .mixcloud-embed-artist{
+    padding-left: 10px;
+    padding-right: 10px;
+
+}
+.mixcloud-embed-playlist li .mixcloud-embed-title{
+    font-style: italic;
+}

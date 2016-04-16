@@ -1,32 +1,54 @@
 <?php
 
 function get_schedslot_meta($id, $key, $single = true) {
-	return get_post_meta( $id, "_wruv_sched_$col", $single );
+	return get_post_meta( $id, "wruv_sched_$key", $single );
 }
 
 add_shortcode( 'weekly-schedule', function($atts) {
+	$dayslot = isset($_GET['d']) ? $_GET['d'] : date('w');
 	$sched_query = new WP_Query([
 		'post_type' => 'schedule_slot',
-		'posts_per_page' => 10,
+		'posts_per_page' => -1,
 		'page' => 1,
 		'paged' => 1,
 
 		'meta_query' => array(
 			array(
-				'dj_show_title' => 'color',
+				'key' => 'wruv_sched_dayslot',
+				'value' => $dayslot,
+				'compare' => '='
 			),
 		),
-
-		'meta_key' => 'timeslot_start',
-		'orderby' => 'meta_value',
+		'meta_value_num' => true,
+		'meta_key' => 'wruv_sched_slot_end',
+		'orderby' => 'meta_value_num',
+		'order' => 'ASC',
 	]);
-	// var_export($sched_query);
+	// echo $sched_query->request;
 	// wp_die();
+	?>
 
+	<div class="bl2page-col sched-header">
+		<table width="100%">
+			<tr>
+				<?php for( $d = 0; $d < 7; $d++ ) { ?>
+					<th align="center">
+						<?php if( $d != $dayslot ) { ?><a href="?d=<?= $d ?>"><?php } ?>
+						<?= date('D', strtotime("Sunday +{$d} days")); ?>
+						<?php if( $d != $dayslot ) { ?></a><?php } ?>
+					</th>
+				<?php } ?>
+			</tr>
+		</table>
+	</div>
+
+	<?php
 	if($sched_query->have_posts()) {
 		while ($sched_query->have_posts()) {
 			$sched_query->the_post();
 
+			$slot_end = get_schedslot_meta( get_the_ID(), 'slot_end');
+			$show_time = get_schedslot_meta( get_the_ID(), 'timeslot_name');
 			$show_title = get_schedslot_meta( get_the_ID(), 'show_name');
 			$show_dj = get_schedslot_meta( get_the_ID(), 'show_dj_name');
 			$show_with = true;
@@ -34,7 +56,7 @@ add_shortcode( 'weekly-schedule', function($atts) {
 				$show_title = $show_dj;
 				$show_dj = '';
 			}
-			$show_genre = get_schedslot_meta( get_the_ID(), 'show_genre');
+			$show_genre = get_schedslot_meta( get_the_ID(), 'genre');
 
 			// the_post();
 			// $image_id     = get_post_thumbnail_id($post->ID);
@@ -42,12 +64,15 @@ add_shortcode( 'weekly-schedule', function($atts) {
 			// $cover_large  = wp_get_attachment_image_src($image_id, 'photo-large');
 			// $num_comments = get_comments_number();
 			?>
-			<div class="bl2page-col">
+			<div class="bl2page-col sched-item">
+				<!--<div class="sched-time"><?= $slot_end ?></div>-->
+				<div class="sched-time"><?= $show_time ?></div>
 				<h2 class="bl2page-title sched-title"><?= $show_title ?></h2>
+				<?php if( !empty($show_dj) ) { ?>
+					<span class="sched-dj"><small class="sched-with">with</small> <?= $show_dj ?></span>
+				<?php } ?>
 				<div class="bl2page-text">
-					<?php if( !empty($shape_dj) ) { ?>
-						<p class="sched-dj"><small class="sched-with">with</small> <?= $show_dj ?></p>
-					<?php } ?>
+
 					<?php if( !empty($show_genre) ) { ?>
 						<p class="sched-genre"><i><?= $show_genre ?></i></p>
 					<?php } ?>
@@ -136,12 +161,12 @@ $tbd = register_tbd_import('wruv_schedule_noon-to-three', [
 	// 	'*' => function($col) { return "postmeta/_wruv_sched_$col"; },
 	// ],
 	//the above would beget the below
-	'row' => function($row) {
+	'row' => function($index, $row) {
 		$result = [];
-		$result['post_name'] = $row['show_name'];
+		$result['post_title'] = $row['show_name'] ?: $row['timeslot_name'];
 		$meta = [];
 		foreach( $row as $col => $val ) {
-			$meta["_wruv_sched_$col"] = $val;
+			$meta["wruv_sched_$col"] = $val;
 		}
 		if( count($meta) > 0 ) $result['post_meta'] = $meta;
 		return $result;
@@ -193,7 +218,7 @@ function wruv_schedule_sample($tbd, $opts = []) {
 	$headers = $tbd->col_names();
 	$sample = [ $headers ];
 	$inc_gy = isset($opts['include_graveyard']) && $opts['include_graveyard'];
-	for( $dayslot = 1; $dayslot <= 6; $dayslot++ ) {
+	for( $dayslot = 0; $dayslot <= 6; $dayslot++ ) {
 		for( $hr = 6; $hr < 30; $hr += $slot_length($hr) ) {
 			$slot_i++;
 			if( !$inc_gy && $hr > 24 ) continue;

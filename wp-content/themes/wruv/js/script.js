@@ -194,7 +194,7 @@ $( document ).ready( function() {
 	var player;
 
 	var start_playing = readCookie('audio_playing');
-	if( start_playing ) {
+	if( start_playing != '' && start_playing > 0 ) {
 		player = init_stream_player();
 	}
 

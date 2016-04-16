@@ -1,8 +1,21 @@
-CHAT_TO_USER = 'test';
+CHAT_TO_USER = 'WRUVDJ';
 
+function clear_chat() {
+	var cd = document.getElementById('chat_dialog');
+	cd.innerHTML = '';
+	jQuery(cd).animate({ scrollTop: 0 }, 500);
+}
 function append_to_chat(who, msg) {
 	var html = '';
-	html += '<div class="msg"><b>' + who + ':</b> ' + msg + '</div>';
+	if( who == 'system' ) {
+		html += '<div class="msg chat-info">' + msg + '</div>';
+	}
+	else if( who == 'ME' ) {
+		html += '<div class="msg chat-said"><b>' + who + ':</b> ' + msg + '</div>';
+	}
+	else {
+		html += '<div class="msg chat-to-me"><b>' + who.replace(CHAT_TO_USER, 'DJ') + ':</b> ' + msg + '</div>';
+	}
 
 	var cd = document.getElementById('chat_dialog');
 	cd.innerHTML += html;
@@ -12,12 +25,13 @@ function append_to_chat(who, msg) {
 }
 
 function handleIQ(oIQ) {
+	return;
 	document.getElementById('chat_dialog').innerHTML += "<div class='msg'>IN (raw): " + oIQ.xml().htmlEnc() + '</div>';
 	// document.getElementById('chat_dialog').lastChild.scrollIntoView();
 	con.send(oIQ.errorReply(ERR_FEATURE_NOT_IMPLEMENTED));
 }
 function handleMessage(oJSJaCPacket) {
-	append_to_chat('WRUVDJ',  oJSJaCPacket.getBody().htmlEnc());
+	append_to_chat(CHAT_TO_USER,  oJSJaCPacket.getBody().htmlEnc());
 	/*
 	var html = '';
 	// html += '<div class="msg"><b>' + oJSJaCPacket.getFromJID() + ':</b><br/>';
@@ -31,7 +45,7 @@ function handleMessage(oJSJaCPacket) {
 	*/
 }
 function handlePresence(oJSJaCPacket) {
-	retu
+	return;
 	var html = '<div class="msg">';
 	if (!oJSJaCPacket.getType() && !oJSJaCPacket.getShow())
 		html += '<b>' + oJSJaCPacket.getFromJID() + ' has become available.</b>';
@@ -61,6 +75,10 @@ function handleStatusChanged(status) {
 function handleConnected() {
 	// document.getElementById('login_pane').style.display = 'none';
 	document.getElementById('sendmsg_pane').style.display = '';
+	jQuery('#tapeman-chat').addClass('chatting');
+	jQuery('.chat-loading').hide();
+	jQuery('#chat-button > i.fa').prop('class', '').addClass('fa fa-ban');
+	append_to_chat('system', 'chatting with ' + CHAT_TO_USER);
 	// document.getElementById('err').innerHTML = '';
 	con.send(new JSJaCPresence());
 }
@@ -77,12 +95,19 @@ function handleIqTime(iq) {
 	con.send(iq.reply([iq.buildNode('display', now.toLocaleString()), iq.buildNode('utc', now.jabberDate()), iq.buildNode('tz', now.toLocaleString().substring(now.toLocaleString().lastIndexOf(' ') + 1))]));
 	return true;
 }
+
+var sent_chat_msg;
 function toggleChatLogin() {
 	if (con.connected()) {
 		quitChat();
 		return;
 	}
 
+	sent_chat_msg = false;
+	document.getElementById('sendmsg_pane').style.display = '';
+	jQuery('#tapeman-chat').addClass('chatting');
+	jQuery('.chat-loading').show();
+	jQuery('#chat-button > i.fa').prop('class', '').addClass('fa fa-spin fa-circle-o-notch');
 	try {
 		var http_base = 'http://' + window.location.host + '/http-bind/';
 		if (http_base.substr(0, 5) === 'ws://' || http_base.substr(0, 6) === 'wss://') {
@@ -98,7 +123,11 @@ function toggleChatLogin() {
 		}
 		setupCon(con);
 
-		var actual_username = 'www' + (Math.random()+'').substring(3,8);
+		var actual_username = readCookie('wruv-chat-user'); //have fun, kids
+		if( !actual_username ) {
+		 	actual_username = 'www' + (Math.random()+'').substring(3,8);
+			writeCookie('wruv-chat-user', actual_username);
+		}
 		// setup args for connect method
 		oArgs = new Object();
 		// oArgs.domain = oForm.server.value;
@@ -127,7 +156,8 @@ function setupCon(oCon) {
 	oCon.registerIQGet('query', NS_VERSION, handleIqVersion);
 	oCon.registerIQGet('query', NS_TIME, handleIqTime);
 }
-function sendChatMsg(msg) {
+
+function sendChatMsg(msg, silent) {
 	/*if (oForm.msg.value == '' || oForm.sendTo.value == '')
 		return false;
 	if (oForm.sendTo.value.indexOf('@') == -1)
@@ -138,7 +168,8 @@ function sendChatMsg(msg) {
 		oMsg.setTo(new JSJaCJID(CHAT_TO_USER + '@' + con.domain));
 		oMsg.setBody(msg);
 		con.send(oMsg);
-		append_to_chat('ME', msg);
+		sent_chat_msg += 1;
+		if( !silent ) append_to_chat('ME', msg);
 		// oForm.msg.value = '';
 		return false;
 	} catch (e) {
@@ -149,12 +180,21 @@ function sendChatMsg(msg) {
 	}
 }
 function quitChat() {
+	if( sent_chat_msg > 0 ) {
+		append_to_chat('system', 'quit chat');
+		sendChatMsg('/me -- closed chat --', true);
+	}
+	else {
+		clear_chat();
+	}
 	var p = new JSJaCPresence();
 	p.setType("unavailable");
 	con.send(p);
 	con.disconnect();
 	// document.getElementById('login_pane').style.display = '';
+	jQuery('#tapeman-chat').removeClass('chatting');
 	document.getElementById('sendmsg_pane').style.display = 'none';
+	jQuery('#chat-button > i.fa').prop('class', '').addClass('fa fa-comment');
 }
 function init() {
 	oDbg = new JSJaCConsoleLogger(0);
@@ -165,9 +205,8 @@ function init() {
 		setupCon(con);
 		if (con.resume()) {
 			// document.getElementById('login_pane').style.display = 'none';
-			document.getElementById('sendmsg_pane').style.display = '';
-			jQuery('.chat-loading').hide();
 			// document.getElementById('err').innerHTML = '';
+			handleConnected();
 		}
 	} catch (e) {
 	} // reading cookie failed - never mind

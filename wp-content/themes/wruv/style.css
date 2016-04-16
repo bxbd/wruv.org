@@ -2361,7 +2361,7 @@ span#player-meta-widget {
 
 .list-nav ul li a:hover {
 	text-decoration: none;
-	color: #1b1b1b;
+	/*color: #1b1b1b;*/
 }
 
 /* --- twitter widget --- */
@@ -4619,74 +4619,4 @@ ul,ol {
 
 .rpwe-clearfix {
 	zoom: 1;
-}
-
-@media screen and (min-width: 800px) {
-	.header-col-1,.header-col.col-1 {
-		width: 25%;
-	}
-
-	.header-col.col-2 {
-		width: 30%;
-	}
-
-	.header-col.col-3 {
-		width: 44%;
-	}
-}
-
-@media screen and (max-width: 800px) {
-	.on-air-img {
-		display: none;
-	}
-
-	.header-col {
-		margin-bottom: 10px;
-	}
-
-	#main-vu-meter {
-		display: none;
-	}
-
-	#header {
-		margin-bottom: 0;
-		padding-bottom: 0;
-	}
-
-	.header-col.col-2 {
-		width: 59%;
-	}
-
-	.header-col.header-col-1 {
-		width: 40%;
-	}
-
-	#logo img {
-		width: 175px;
-	/*float: left;*/
-	}
-}
-
-@media screen and (max-width: 450px) {
-	#logo img {
-		width: 185px;
-		margin: 0 auto;
-	}
-
-	#tapeman-chat {
-		background: transparent;
-		height: 6px;
-	}
-
-	.tape-label {
-		line-height: 100%;
-	}
-
-	#header .header-col {
-		width: 100%;
-	}
-
-	.header-col.header-col-1 {
-		width: 100%;
-	}
 }

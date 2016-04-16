@@ -10,6 +10,9 @@ Text Domain: tbd-importer
 License: GPL version 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 */
 
+require __DIR__ . '/vendor/autoload.php';
+use League\Csv\Reader;
+
 if ( ! class_exists( 'TBD_Importer' ) ) {
 class TBD_Importer {
 
@@ -113,10 +116,13 @@ class TBD_Importer {
 
 			exit;
 		}
-		elseif( isset($_POST['tbd-upload']) ) {
+		elseif( isset($_FILES['tbd-upload']) ) {
 			$fn = $_FILES['tbd-upload']['tmp_name'];
 
-			// var_export(
+			$this->do_import($fn);
+
+			echo "file imported";
+			exit;
 		}
 
 		?>
@@ -129,6 +135,70 @@ class TBD_Importer {
 			<input type="submit" value="OK">
 		</form>
 		<?php
+	}
+
+	public function do_import($fn) {
+		header('Content-Type: text/plain');
+		$csv = Reader::createFromPath($fn);
+		$headers = $csv->fetchOne();
+
+		$cbs = $this->handlers;
+		if( isset($cbs['init']) ) {
+			// $h['init']->()
+		}
+
+		$post_params = array_keys(array(//lifted right out of wp_insert_post, it's the defaults, we only want the keys
+			'post_author' => $user_id,
+			'post_content' => '',
+			'post_content_filtered' => '',
+			'post_title' => '',
+			'post_excerpt' => '',
+			'post_status' => 'draft',
+			'post_type' => 'post',
+			'comment_status' => '',
+			'ping_status' => '',
+			'post_password' => '',
+			'to_ping' =>  '',
+			'pinged' => '',
+			'post_parent' => 0,
+			'menu_order' => 0,
+			'guid' => '',
+			'import_id' => 0,
+			'context' => '',
+		));
+		if( isset($cbs['row']) ) {
+			$cb = $cbs['row'];
+			$csv->setOffset(1)->each(function( $row, $index, $iterator ) use ($post_params, $cb, $headers) {
+				$row_assoc = [];
+				for( $i = 0; $i < count($headers); $i++ ) {
+					$row_assoc[ $headers[$i] ] = $row[$i];
+				}
+				$post_spec = $cb($index, $row_assoc);
+
+				if( !empty($post_spec) ) {
+					$post_args = array(
+						'post_type' => $this->post_type,
+						'post_status' => 'publish',
+					);
+					foreach( $post_spec as $pa => $pa_val) {
+						if( in_array($pa, $post_params) ) {
+							$post_args[$pa] = $pa_val;
+						}
+					}
+
+					$pid = wp_insert_post($post_args);
+					if( isset($post_spec['post_meta']) ) {
+						foreach( $post_spec['post_meta'] as $pm => $pm_val ) {
+							var_export([$pid, $pm, $pm_val, true]);
+							add_post_meta($pid, $pm, $pm_val, true);
+						}
+					}
+				}
+
+				return true;
+				// return false;//stops the loop
+			});
+		}
 	}
 }
 

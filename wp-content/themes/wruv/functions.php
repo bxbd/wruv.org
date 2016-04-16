@@ -91,6 +91,7 @@ function wizedesign_load_javascript() {
 	wp_enqueue_script('map', 'http://maps.googleapis.com/maps/api/js?sensor=false', array('jquery'), false, true );
 	wp_enqueue_script( 'jsjac', get_template_directory_uri() . '/js/jsjac.uncompressed.js', array( 'jquery' ), false, true );
 	wp_enqueue_script( 'jsjac-client', get_template_directory_uri() . '/js/jsjac-client.js', array( 'jquery', 'jquery-ui', 'jsjac' ), false, true );
+	wp_enqueue_script( 'jquery-sparkles', get_template_directory_uri() . '/js/jquery-canvas-sparkles.min.js', array( 'jquery', 'jquery-ui' ) );
 	// wp_enqueue_script( 'wp-mediaelement', 'https://cdnjs.cloudflare.com/ajax/libs/mediaelement/2.19.0/mediaelement-and-player.js', array( 'jquery' ), false, true );
 	wp_enqueue_script( 'mediaelement', 'https://cdnjs.cloudflare.com/ajax/libs/mediaelement/2.19.0/mediaelement-and-player.min.js', array( 'jquery' ), false, true );
 }

@@ -1,31 +1,128 @@
 <?php
 
+date_default_timezone_set('America/New_York'); //this is totally fucked
+
+function wruv_current_sched_slot() {
+	date_default_timezone_set('America/New_York'); //this is totally fucked
+	// echo date('w') . ' ' . date('g');
+	$current_hr = (date('w') * 24) + date('G');
+	global $wpdb;
+
+/*
+	SELECT wp_posts.*, mt_slot_end.meta_value AS slot_end
+	FROM wp_posts
+		INNER JOIN wp_postmeta AS mt_slot_end ON ( wp_posts.ID = mt_slot_end.post_id  AND mt_slot_end.meta_key = 'wruv_sched_slot_end' )
+*/
+
+
+	$metakeys = ['slot_end', 'show_name', 'show_dj_name', 'genre', 'dayslot', 'timeslot_start', 'timeslot_end' ];
+	$joins = [];
+	$fields = [];
+	foreach( $metakeys as $k ) {
+		$_k = "wruv_sched_$k";
+		array_push($joins, "INNER JOIN wp_postmeta AS mt_$k ON ( wp_posts.ID = mt_$k.post_id  AND mt_$k.meta_key = '$_k' )");
+		array_push($fields, "mt_$k.meta_value AS $k");
+	}
+
+	$sched_slot_sql = "
+		SELECT wp_posts.post_title, " . implode(", ", $fields) . "
+		FROM wp_posts
+			" . implode("\n", $joins) . "
+		WHERE
+			mt_slot_end.meta_value > $current_hr
+		ORDER BY slot_end
+		LIMIT 1
+	";
+
+	// echo $sched_slot_sql;
+	$sched_slot = $wpdb->get_results($sched_slot_sql);
+	$ret = (array)$sched_slot[0];
+	$ret['show_time_str'] = sched_time_str($ret['dayslot'], $ret['timeslot_start'], $ret['timeslot_end']);
+
+	return $ret;
+}
+
 function get_schedslot_meta($id, $key, $single = true) {
-	return get_post_meta( $id, "_wruv_sched_$col", $single );
+	return get_post_meta( $id, "wruv_sched_$key", $single );
+}
+
+function dow($d) { //return 3 letter day of week
+	return date('D', strtotime("Sunday +{$d} days"));
+}
+
+function ampm($h) {
+	$h %= 24;
+	return date("ga", strtotime("$h:00"));
+}
+function sched_time_str($d, $hs, $he) {
+	$dayname = dow($d);
+
+	$result = $dayname . ' ' . ampm($hs) . '-' . ampm($he);
+	$result = str_replace('12am', 'midnight', $result);
+	$result = str_replace('12pm', 'noon', $result);
+
+	return $result;
 }
 
 add_shortcode( 'weekly-schedule', function($atts) {
+
+	date_default_timezone_set('America/New_York'); //so very totally fucked
+
+	$today_day = date('w');
+
+	//keep in mind that according to wruv scheduling,
+	// technically the hours from midnight to 6am occur on the same 'day'
+	// as the rest of the shows from 6am to midnight
+	// $current_hr = ($today_day * 24) + $_GET['h'];
+	$current_hr = ($today_day * 24) + date('G');
+
+
+	$dayslot = isset($_GET['d']) ? $_GET['d'] : $today_day;
 	$sched_query = new WP_Query([
 		'post_type' => 'schedule_slot',
-		'posts_per_page' => 10,
-		'page' => 1,
-		'paged' => 1,
+		'posts_per_page' => -1,
 
 		'meta_query' => array(
 			array(
-				'dj_show_title' => 'color',
+				'key' => 'wruv_sched_dayslot',
+				'value' => $dayslot,
+				'compare' => '='
 			),
 		),
-
-		'meta_key' => 'timeslot_start',
-		'orderby' => 'meta_value',
+		'meta_value_num' => true,
+		'meta_key' => 'wruv_sched_slot_end',
+		'orderby' => 'meta_value_num',
+		'order' => 'ASC',
 	]);
-	// var_export($sched_query);
+	// echo $sched_query->request;
 	// wp_die();
+	?>
+
+	<div class="bl2page-col sched-header">
+		<table width="100%">
+			<tr>
+				<?php for( $d = 0; $d < 7; $d++ ) { ?>
+					<th align="center">
+						<?php if( $d != $dayslot ) { ?><a href="?d=<?= $d ?>"><?php } ?>
+						<?= date('D', strtotime("Sunday +{$d} days")); ?>
+						<?php if( $d != $dayslot ) { ?></a><?php } ?>
+					</th>
+				<?php } ?>
+			</tr>
+		</table>
+	</div>
+
+	<?php
+	$gy_output = '';
 
 	if($sched_query->have_posts()) {
 		while ($sched_query->have_posts()) {
 			$sched_query->the_post();
+
+			$show_slotend = get_schedslot_meta( get_the_ID(), 'slot_end');
+			$show_start = get_schedslot_meta( get_the_ID(), 'timeslot_start');
+			$show_end = get_schedslot_meta( get_the_ID(), 'timeslot_end');
+			$show_time_str = sched_time_str( $dayslot, $show_start, $show_end );
 
 			$show_title = get_schedslot_meta( get_the_ID(), 'show_name');
 			$show_dj = get_schedslot_meta( get_the_ID(), 'show_dj_name');
@@ -34,28 +131,38 @@ add_shortcode( 'weekly-schedule', function($atts) {
 				$show_title = $show_dj;
 				$show_dj = '';
 			}
-			$show_genre = get_schedslot_meta( get_the_ID(), 'show_genre');
+			$show_genre = get_schedslot_meta( get_the_ID(), 'genre');
 
-			// the_post();
-			// $image_id     = get_post_thumbnail_id($post->ID);
-			// $cover   	  = wp_get_attachment_image_src($image_id, 'blog-home');
-			// $cover_large  = wp_get_attachment_image_src($image_id, 'photo-large');
-			// $num_comments = get_comments_number();
-			?>
-			<div class="bl2page-col">
+			$is_current_slot = false; //wow this is hard
+
+			//kind of hate how this works
+			$show_isgy = get_schedslot_meta( get_the_ID(), 'graveyard');
+			if( $show_isgy ) {
+				ob_start();
+			}
+		?>
+			<div class="bl2page-col sched-item<?= $is_current_slot ? " now" : '' ?>">
+				<?php //= "$dayslot == $today_day && $show_start <= $current_hr && $show_end > $current_hr" ?>
+				<div class="sched-time"><?= $show_time_str ?></div>
 				<h2 class="bl2page-title sched-title"><?= $show_title ?></h2>
-				<div class="bl2page-text">
-					<?php if( !empty($shape_dj) ) { ?>
-						<p class="sched-dj"><small class="sched-with">with</small> <?= $show_dj ?></p>
-					<?php } ?>
-					<?php if( !empty($show_genre) ) { ?>
+				<?php if( !empty($show_dj) ) { ?>
+					<span class="sched-dj"><small class="sched-with">with</small> <span class="sched-dj-name"><?= $show_dj ?></span></span>
+				<?php } ?>
+				<?php if( !empty($show_genre) ) { ?>
+					<div class="bl2page-text">
 						<p class="sched-genre"><i><?= $show_genre ?></i></p>
-					<?php } ?>
-				</div>
+					</div>
+				<?php } ?>
 			</div>
 			<?php
+
+			if( $show_isgy ) {
+				$gy_output .= ob_get_clean();
+			}
 		}
 	}
+
+	echo $gy_output;
 });
 
 add_action ('init', 'register_schedule_slot_post_type');
@@ -136,12 +243,12 @@ $tbd = register_tbd_import('wruv_schedule_noon-to-three', [
 	// 	'*' => function($col) { return "postmeta/_wruv_sched_$col"; },
 	// ],
 	//the above would beget the below
-	'row' => function($row) {
+	'row' => function($index, $row) {
 		$result = [];
-		$result['post_name'] = $row['show_name'];
+		$result['post_title'] = $row['show_name'] ?: $row['timeslot_name'];
 		$meta = [];
 		foreach( $row as $col => $val ) {
-			$meta["_wruv_sched_$col"] = $val;
+			$meta["wruv_sched_$col"] = $val;
 		}
 		if( count($meta) > 0 ) $result['post_meta'] = $meta;
 		return $result;
@@ -169,7 +276,7 @@ function wruv_schedule_sample($tbd, $opts = []) {
 
 		$_hr = $hr % 24;
 		$hr_ampm = date("ga", strtotime("$_hr:00"));
-		$hr_ampm-$hr_end_ampm = date("ga", strtotime($slot_end($_hr) . ":00"));
+		$hr_end_ampm = date("ga", strtotime($slot_end($_hr) . ":00"));
 
 		$result = "$dayname $hr_ampm-$hr_end_ampm";
 		$result = str_replace('12am', 'midnight', $result);
@@ -193,7 +300,7 @@ function wruv_schedule_sample($tbd, $opts = []) {
 	$headers = $tbd->col_names();
 	$sample = [ $headers ];
 	$inc_gy = isset($opts['include_graveyard']) && $opts['include_graveyard'];
-	for( $dayslot = 1; $dayslot <= 6; $dayslot++ ) {
+	for( $dayslot = 0; $dayslot <= 6; $dayslot++ ) {
 		for( $hr = 6; $hr < 30; $hr += $slot_length($hr) ) {
 			$slot_i++;
 			if( !$inc_gy && $hr > 24 ) continue;

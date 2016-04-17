@@ -467,6 +467,9 @@ hr.drawn {
 	display: none;
 }
 
+.bl2page-col.sched-header {
+	width: 96%;
+}
 .sched-item {
 	border-bottom: 1px solid #efefef;
 }
@@ -674,4 +677,11 @@ hr.drawn {
 	#footer-bottom .footer-row {
 		max-width: 375px;
 	}
+}
+
+.so-sorry {
+	background: black;
+	color: white;
+	text-align: center;
+	font-style: italic;
 }

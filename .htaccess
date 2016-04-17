@@ -4,6 +4,9 @@ AddDefaultCharset UTF-8
 RewriteEngine On
 RewriteRule ^/*http-bind/$ http://chat.barbershop.wruv.org:5280/http-bind [P,L]
 
+#this one is only temporary
+RewriteRule ^/*service/streamtitle/*$ http://bossanova.wruv.org/service/streamtitle [P,L] 
+
 # BEGIN WordPress
 <IfModule mod_rewrite.c>
 RewriteEngine On

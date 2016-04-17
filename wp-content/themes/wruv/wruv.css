@@ -474,11 +474,20 @@ hr.drawn {
 .sched-item {
 	border-bottom: 1px solid #efefef;
 }
-.sched-item.now .sched-time {
+
+.sched-item .sched-time {
+    background: black;
+    color: white;
+    padding: 0px 6px;
+    margin-left: -6px;
+}
+
+.sched-item.now {
 	background: black;
 	color: white;
-	padding:0 5px;
-	margin-left: -5px;
+	/*color: black;*/
+	/*padding:0 5px;
+	margin-left: -5px;*/
 }
 .sched-item .sched-title {
 	display: inline-block;
@@ -487,6 +496,18 @@ hr.drawn {
 	background: black;
 	color: white;
 	padding:0 5px;
+}
+
+.sched-item.now .sched-title {
+	color: white;
+}
+.sched-item.now .sched-time {
+	background: white;
+	color: black;
+}
+.sched-item.now .sched-dj-name {
+	background: white;
+	color: black;
 }
 
 @media screen and (max-width: 1034px) {

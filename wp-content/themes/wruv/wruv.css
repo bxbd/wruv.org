@@ -586,7 +586,7 @@ hr.drawn {
 }
 
 
-@media screen and (min-width: 800px) {
+@media screen and (min-width: 801px) {
 	.header-col-1,.header-col.col-1 {
 		width: 25%;
 	}

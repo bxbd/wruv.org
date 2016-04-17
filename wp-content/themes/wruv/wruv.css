@@ -601,6 +601,13 @@ hr.drawn {
 }
 
 @media screen and (max-width: 800px) {
+	#sparkles-button, #sparkles-label {
+		display: inline-block;
+	}
+	.tape-label, .tape-button {
+		width: 20%;
+	}
+
 	.on-air-img {
 		display: none;
 	}

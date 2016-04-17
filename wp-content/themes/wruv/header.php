@@ -11,10 +11,13 @@
 
 <!-- Title -->
 <title>
+
 <?php
+/*
 ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
+*/
 
 	$prefix = false;
 
@@ -93,7 +96,7 @@ if (of_get_option('active_player', '1') == '1') {
 
 <!-- header -->
 	<div class="header-row clearfix">
-		<div id="header">
+		<div id="header" class="sparkle-target">
 			<div class="header-col header-col-1">
 				<div id="logo">
 					<?php
@@ -116,8 +119,29 @@ if (of_get_option('active_player', '1') == '1') {
 			<div class="header-col col-2">
 				<script>
 					jQuery(document).ready(function($) {
+
+						$('#sparkles-button').click( function() {
+							var $st = $('.sparkle-target');
+							$st.sparkle()
+							    .off("mouseover.sparkle")
+							    .off("mouseout.sparkle")
+							    .off("focus.sparkle")
+							    .off("blur.sparkle");
+
+							if( $(this).data('sparkle') ) {
+								$(this).css('color', 'white');
+								$(this).data('sparkle', false);
+								$st.trigger("stop.sparkle");
+							}
+							else {
+								$(this).css('color', 'gold');
+								$(this).data('sparkle', true);
+								$st.trigger("start.sparkle");
+							}
+							return false;
+						});
 						$('#chat-label, #chat-button').click( function() {
-							$('.chat-loading').show();
+							jQuery('#tapeman-chat').addClass('chatting');
 							toggleChatLogin();
 							return false;
 						});
@@ -125,9 +149,11 @@ if (of_get_option('active_player', '1') == '1') {
 						$('#chat-input').keypress( function(e) {
 							if( e.which == 13 ) {
 								sendChatMsg($(this).val());
+								$(this).val('');
 								return false;
 							}
 						});
+
 					}, $);
 				</script>
 				<div class="tapeman-container">
@@ -138,25 +164,25 @@ if (of_get_option('active_player', '1') == '1') {
 								<input name="msg" id='chat-input' rows="3" cols="80" tabindex="2" placeholder="type to chat...">
 							</div>
 						</div>
-						<div class="chat-loading"><i class="fa fa-spin fa-circle-o-notch"></i></div>
+						<div class="chat-loading hidden"><i class="fa fa-spin fa-circle-o-notch"></i></div>
 					</div>
 
 					<div class="tapedeck-controls">
 						<span class="tape-label" id="chat-label">
-							DJ Chat
+							Chat DJ
 						</span>
-						<span class="tape-label">
-							Full Size
+						<span class="tape-label" id="sparkles-label">
+							Sparkle
 						</span>
 						<span class="tape-label" id="play-label">
 							Play
 						</span>
-						<span class="tape-label">
+						<span class="tape-label" id="stream-label">
 							Stream
 						</span>
 						<div class="inner">
-							<a href="#" class="tape-button" id="chat-button"><i class="fa fa-comment-o"></i></a>
-							<a href="#" class="tape-button"><i class="fa fa-external-link"></i></a>
+							<a href="#" class="tape-button" id="chat-button"><i class="fa fa-comment"></i></a>
+							<a href="#" class="tape-button" id="sparkles-button"><i class="fa fa-star"></i></a>
 							<a href="#" id="play-pause-button" class="tape-button"><i class="fa fa-play"></i></a>
 							<div id="multiplayer" class="tape-button">
 								<div class="player-choice">
@@ -174,18 +200,35 @@ if (of_get_option('active_player', '1') == '1') {
 				</div>
 			</div>
 			<div class="header-col col-3">
-				<img src="/wp-content/themes/wruv/images/wruv-on-air.png" class="on-air-img">
+				<div class="on-air-img"></div>
 				<div id="main-vu-meter">
 					<div class="needle" id="needle"></div>
 				</div>
 				<div class="header-meta">
-					<div class="onair-showname">My Dog is a Person Too</div>
+
+					<?php $current_show = wruv_current_sched_slot(); ?>
+
+                    <div class="onair-showtime"><?= $current_show['show_time_str'] ?></div>
+                    <div class="onair-showname"><?= $current_show['show_name'] ?: $current_show['show_dj_name']  ?></div>
+					<?php if( !empty($current_show['show_name']) && !empty($current_show['show_dj_name']) ) { ?>
+                    <div class="onair-djname-withwith">
+						<sup class="onair-with">with</sup>
+                    	<div class="onair-djname"><?= $current_show['show_dj_name'] ?></div>
+					</div>
+					<?php } ?>
+					<hr class="drawn">
+                    <div class="onair-genre"><?= preg_replace('/\//', ' / ', $current_show['genre']) ?></div>
+
+
+					<!--
+					<div class="onair-showname"><?= $current_show['show_name'] ?></div>
 					<div class="onair-djname-withwith">
 						<sup class="onair-with">with</sup>
-						<div class="onair-djname">DJ Liz</div>
+						<div class="onair-djname"><?= $current_show['show_dj_name'] ?></div>
 					</div>
 					<hr class="drawn">
 					<div class="onair-genre">music for the being alive jive (mix of indie rock, folk, blues, electronic, and more)</div>
+				-->
 				</div>
 				<div class="mobile-stuff clearfix">
 					<div id="mobile-menu-container">

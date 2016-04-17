@@ -28,7 +28,7 @@
 	text-align: center;
 }
 .header-meta .onair-djname-withwith {
-	text-align: right;
+	text-align: center;
 }
 .header-meta sup.onair-with {
 	font-size: 14px;
@@ -39,13 +39,14 @@
 }
 .header-meta .onair-djname {
 	display: inline-block;
+	line-height: 100%;
 }
 
 .header-meta .onair-genre {
 	display: block;
 	font-size: 18px;
 	line-height: 100%;
-
+	text-align: center;
 }
 
 hr.drawn {
@@ -58,25 +59,6 @@ hr.drawn {
 
 #header .fa {
 	margin-right: 0;
-}
-
-.player-label:after {
-	content: '';
-	background: #fff;
-	height: 1px;
-	position: absolute;
-	top: 6px;
-	right: 10px;
-	width: 30%;
-}
-
-.player-label {
-	position: relative;
-	color: #fff;
-	font-family: 'Tittillium Web',sans-serif;
-	text-transform: uppercase;
-	font-size: 12px;
-	margin-top: 0;
 }
 
 #multiplayer {
@@ -134,7 +116,7 @@ hr.drawn {
 }
 
 #main-vu-meter {
-	height: 100px;
+	height: 109px;
 	width: 50%;
 	float: right;
 	margin-top: 5px;
@@ -244,7 +226,10 @@ hr.drawn {
 }
 
 .on-air-img {
-	width: 45%;
+	background: url('/wp-content/themes/wruv/images/wruv-on-air.png') no-repeat center center;
+	background-color: black;
+	width: 211px;
+	height: 115px;
 	display: inline-block;
 }
 
@@ -257,6 +242,17 @@ hr.drawn {
 	font-size: 13px;
 	vertical-align: top;
 }
+
+#play-label.tape-label {
+	text-transform: uppercase;
+	font-size: 12px;
+}
+
+#stream-label.tape-label {
+	width: 25%;
+	text-align: center;
+}
+
 /*
 #chat-button,#chat-label {
 	width: 30%;
@@ -289,9 +285,30 @@ hr.drawn {
 	position: relative;
 }
 
+
 #chat_dialog {
 	height: 130px;
 	overflow-y: scroll;
+}
+
+#chat_dialog .msg b {
+	display: inline-block;
+	width: 25px;
+	text-align: center;
+}
+
+#chat_dialog .msg.chat-to-me b {
+	background: black;
+	color: white;
+}
+#chat_dialog .msg.chat-info {
+	font-style: italic;
+	text-align: center;
+	background-color: black;
+	color: white;
+}
+#chat_dialog .msg.chat-said {
+
 }
 
 #chat-input {
@@ -450,10 +467,43 @@ hr.drawn {
 	display: none;
 }
 
+.bl2page-col.sched-header {
+	width: 96%;
+}
+.sched-item {
+	border-bottom: 1px solid #efefef;
+}
+.sched-item.now .sched-time {
+	background: black;
+	color: white;
+	padding:0 5px;
+	margin-left: -5px;
+}
 .sched-item .sched-title {
 	display: inline-block;
 }
+.sched-item .sched-dj-name {
+	background: black;
+	color: white;
+	padding:0 5px;
+}
 
+@media screen and (max-width: 1034px) {
+	#main-vu-meter {
+		display: none;
+	}
+	.on-air-img {
+		width: 100%;
+	}
+}
+@media screen and (max-width: 936px) {
+	#sparkles-button, #sparkles-label {
+		display: none;
+	}
+	.tape-label, .tape-button {
+		width: 46px;
+	}
+}
 @media screen and (max-width: 768px) {
 	#text-20 img {
 		width: 70px;
@@ -534,6 +584,79 @@ hr.drawn {
 
 }
 
+
+@media screen and (min-width: 800px) {
+	.header-col-1,.header-col.col-1 {
+		width: 25%;
+	}
+
+	.header-col.col-2 {
+		width: 30%;
+	}
+
+	.header-col.col-3 {
+		width: 44%;
+	}
+}
+
+@media screen and (max-width: 800px) {
+	.on-air-img {
+		display: none;
+	}
+
+	.header-col {
+		margin-bottom: 10px;
+	}
+
+	#main-vu-meter {
+		display: none;
+	}
+
+	#header {
+		margin-bottom: 0;
+		padding-bottom: 0;
+	}
+
+	.header-col.col-2 {
+		width: 59%;
+	}
+
+	.header-col.header-col-1 {
+		width: 40%;
+	}
+
+	#logo img {
+		width: 175px;
+	/*float: left;*/
+	}
+}
+
+@media screen and (max-width: 450px) {
+	#logo img {
+		width: 185px;
+		margin: 0 auto;
+	}
+
+	#tapeman-chat {
+		display: none;
+	}
+	#tapeman-chat.chatting {
+		display: block;
+	}
+
+	.tape-label {
+		line-height: 100%;
+	}
+
+	#header .header-col {
+		width: 100%;
+	}
+
+	.header-col.header-col-1 {
+		width: 100%;
+	}
+}
+
 @media (max-width: 414px) {
 	.footer-bottom-social #footer-social {
 		width: 100%;
@@ -554,4 +677,11 @@ hr.drawn {
 	#footer-bottom .footer-row {
 		max-width: 375px;
 	}
+}
+
+.so-sorry {
+	background: black;
+	color: white;
+	text-align: center;
+	font-style: italic;
 }

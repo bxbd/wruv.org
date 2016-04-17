@@ -1,4 +1,4 @@
-@media screen and (max-width:1030px) { 
+@media screen and (max-width:1030px) {
     #slider-large {
         width: 94%;
         padding: 3%;
@@ -19,7 +19,7 @@
 }
 
 /* tablet */
-@media screen and (min-width:800px) and (max-width:1020px) { 
+@media screen and (min-width:800px) and (max-width:1020px) {
     #slider-large {
         width: 94%;
         padding: 3%;
@@ -45,9 +45,9 @@
         padding-right: 30px;
     }
     img {
-        display: block;
-        width: 100%;
-        height: auto;
+        /*display: block;*/
+        /*width: 100%;*/
+        /*height: auto;*/
     }
     .wpp-thumbnail {
         width: 70px;
@@ -57,7 +57,7 @@
         height: 100%;
         margin: 0 auto;
     }
-    
+
     .content-page {
   width: 550px !important;
   display: inline-block;
@@ -120,7 +120,7 @@
     }
     .title-home h3 { float: none }
     .bl1shr-col {
-        width: 100%; 
+        width: 100%;
         margin: 1%;
         padding: 2%;
     }
@@ -492,7 +492,7 @@
 }
 
 /* phone */
-@media screen and (max-width:800px) { 
+@media screen and (max-width:800px) {
     #content {
         padding-left: 10px;
         padding-right: 10px;
@@ -706,7 +706,7 @@
     .bl1page-col {
         width: 96%;
         padding: 2%;
-    } 
+    }
     .bl2page-col {
         width: 96%;
         padding: 2%;
@@ -1026,7 +1026,7 @@
 
 .selectnav { display: none; }
 
-@media screen and (max-width:700px) { 
+@media screen and (max-width:700px) {
     #footer-bottom {
         width: 100%;
         height: 80px;
@@ -1053,7 +1053,7 @@
 }
 
 
-@media (max-width:500px) { 
+@media (max-width:500px) {
     .one_third,
     .two_third,
     .one_half,

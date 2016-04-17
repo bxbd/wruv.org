@@ -467,6 +467,12 @@ hr.drawn {
 	display: none;
 }
 
+<<<<<<< HEAD
+=======
+.bl2page-col.sched-header {
+	width: 96%;
+}
+>>>>>>> d9b1579f95b9cccab0ce810bb1f489fd2dcaf8c5
 .sched-item {
 	border-bottom: 1px solid #efefef;
 }
@@ -674,4 +680,11 @@ hr.drawn {
 	#footer-bottom .footer-row {
 		max-width: 375px;
 	}
+}
+
+.so-sorry {
+	background: black;
+	color: white;
+	text-align: center;
+	font-style: italic;
 }

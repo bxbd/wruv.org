@@ -42,6 +42,94 @@ function wruv_current_sched_slot() {
 	return $ret;
 }
 
+
+function parse_files_this_week() { //this code was translated from perl, which is why it seems odd
+	$file_txt = get_transient('this_week_html');
+
+	if( !$file_txt ) {
+		$ch = curl_init();
+		curl_setopt($ch, CURLOPT_URL, "http://www.uvm.edu/~wruv/res/thisweek/");
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		$file_txt = curl_exec($ch);
+		$remaining_m = 15 -(date('i', time()) % 15);
+		set_transient('this_week_html', $file_txt, $remaining_m * 60);
+	}
+	return $file_txt;
+	foreach( explode("\n", $file_txt) as $line ) {
+		if( preg_match("/\<a href=\"([^\"]+)\"/", $line, $m ) ) {
+			$fn = $m[1];
+			if( preg_match("/^\./", $fn) || !preg_match("/^[0-9\-]{10}/", $fn) ) continue;
+
+			$finfo = preg_split("/\s{2,}/", $line);
+			$modified_str = $finfo[0];
+			$size = $finfo[1];
+
+			// var_export([$fn, $line, $modified_str, $size]); exit;
+		}
+	}
+/*
+
+   my %files;
+   my $now = time;
+
+   foreach( split(/\n/, $file_txt) ) {
+      if( /<a href="([^"]+)"/ ) { #"
+         my $fn = $1;
+         next if $fn =~ /^\./ || $fn !~ /^[0-9\-]{10}/;
+
+         my (undef, $modified_str, $size) = split( /\s{2,}/, $_ );
+
+         my $modified = Date::Parse::str2time( $modified_str );
+         my $now_uploading = $now - ($modified || 0) <= 1;  #if it's been modified in the last 1 seconds, this is still being uploaded.
+
+         my ($date, $rest) = split /00h_/, $fn;
+
+         my ($y, $m, $d) = split /-/, $date;
+         my $h;
+         ($d, $h) = split /_/, $d;
+
+         my $jd = julian_day($y, $m, $d);
+         my $ts = jd_secondslocal($jd, $h, 0, 0);
+         my $wkday_i = day_of_week( $jd );
+         if( $h >= 0 && $h <= 4 ) {
+           $wkday_i = ($wkday_i - 1) % 7;
+         }
+
+         my $wkday = qw(Sun Mon Tue Wed Thu Fri Sat)[day_of_week( $jd )];
+
+         my $file_info = {
+            now_uploading => $now_uploading,
+            file => $fn,
+            ts => $ts,
+            'y'=>$y,
+            'm'=>$m,
+            'd'=>$d,
+            'h'=>$h,
+            'wkday' => $wkday,
+            'wkday_i' => $wkday_i,
+            # title => $slot_rec->{show_name},
+            # genre => $slot_rec->{genre},
+            # dj => $slot_rec->{show_dj_name},
+            ##  title => $title,
+            ##  genre => $genre,
+            ##  dj => $dj,
+            ##  dj_id => $slot_rec->{dj_id},
+         };
+
+         my $fkey = "$wkday_i-$h";
+
+         #discard it unless we already found one for this slot and it's the one from this week
+         next if exists $files{$fkey} && $files{$fkey}{ts} > $ts;
+         $files{$fkey} = $file_info
+      }
+   }
+
+   return [ sort { $a->{ts} <=> $b->{ts} } values %files ];
+}
+*/
+}
+
+
 function get_schedslot_meta($id, $key, $single = true) {
 	return get_post_meta( $id, "wruv_sched_$key", $single );
 }
@@ -78,27 +166,10 @@ add_shortcode( 'weekly-schedule', function($atts) {
 
 
 	$dayslot = isset($_GET['d']) ? $_GET['d'] : $today_day;
-	$sched_query = new WP_Query([
-		'post_type' => 'schedule_slot',
-		'posts_per_page' => -1,
 
-		'meta_query' => array(
-			array(
-				'key' => 'wruv_sched_dayslot',
-				'value' => $dayslot,
-				'compare' => '='
-			),
-		),
-		'meta_value_num' => true,
-		'meta_key' => 'wruv_sched_slot_end',
-		'orderby' => 'meta_value_num',
-		'order' => 'ASC',
-	]);
-	// echo $sched_query->request;
-	// wp_die();
 	?>
 
-	<div class="bl2page-col sched-header">
+	<div class="bl2page-col sched-header" style="display: block">
 		<table width="100%">
 			<tr>
 				<?php for( $d = 0; $d < 7; $d++ ) { ?>
@@ -108,12 +179,44 @@ add_shortcode( 'weekly-schedule', function($atts) {
 						<?php if( $d != $dayslot ) { ?></a><?php } ?>
 					</th>
 				<?php } ?>
+				<th><a href="?archives=1" class="invert">LISTEN TO ARCHIVES</a></th>
 			</tr>
 		</table>
 	</div>
 
 	<?php
+
+
+		if( isset($_GET['archives']) ) {
+			$show_files = parse_files_this_week();
+			echo "<div class='so-sorry'>Our archives will be moved into the schedule soon, please bear with us</div>";
+			echo preg_replace('/href="/', 'href="http://www.uvm.edu/~wruv/res/thisweek/', $show_files);
+			return;
+		}
+
+		$sched_query = new WP_Query([
+			'post_type' => 'schedule_slot',
+			'posts_per_page' => -1,
+
+			'meta_query' => array(
+				array(
+					'key' => 'wruv_sched_dayslot',
+					'value' => $dayslot,
+					'compare' => '='
+				),
+			),
+			'meta_value_num' => true,
+			'meta_key' => 'wruv_sched_slot_end',
+			'orderby' => 'meta_value_num',
+			'order' => 'ASC',
+		]);
+		// echo $sched_query->request;
+		// wp_die();
+
+
 	$gy_output = '';
+
+	// $show_files = parse_files_this_week();
 
 	if($sched_query->have_posts()) {
 		while ($sched_query->have_posts()) {
@@ -135,6 +238,15 @@ add_shortcode( 'weekly-schedule', function($atts) {
 
 			$is_current_slot = false; //wow this is hard
 
+			// foreach( $show_files as $file ) {
+			// 	if( $file['wkday_i'] == $dayslot
+			// 		&& $file['h'] == ($show_start % 24 )
+			// 	) {
+			// 		$show_file = $file;
+			// 		break;
+			// 	}
+			// }
+
 			//kind of hate how this works
 			$show_isgy = get_schedslot_meta( get_the_ID(), 'graveyard');
 			if( $show_isgy ) {
@@ -153,6 +265,7 @@ add_shortcode( 'weekly-schedule', function($atts) {
 						<p class="sched-genre"><i><?= $show_genre ?></i></p>
 					</div>
 				<?php } ?>
+				<?= $show_file ?>
 			</div>
 			<?php
 

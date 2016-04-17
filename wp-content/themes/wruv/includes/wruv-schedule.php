@@ -30,11 +30,11 @@ function wruv_current_sched_slot() {
 			" . implode("\n", $joins) . "
 		WHERE
 			mt_slot_end.meta_value > $current_hr
-		ORDER BY slot_end
+		ORDER BY slot_end+0
 		LIMIT 1
 	";
 
-	// echo $sched_slot_sql;
+	// echo "<pre>" . $sched_slot_sql . "</pre>";
 	$sched_slot = $wpdb->get_results($sched_slot_sql);
 	$ret = (array)$sched_slot[0];
 	$ret['show_time_str'] = sched_time_str($ret['dayslot'], $ret['timeslot_start'], $ret['timeslot_end']);

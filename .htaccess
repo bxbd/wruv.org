@@ -1,8 +1,13 @@
 AddDefaultCharset UTF-8
 #Options +MultiViews
 
+AddType audio/x-mpegurl .m3u
+
 RewriteEngine On
 RewriteRule ^/*http-bind/$ http://chat.barbershop.wruv.org:5280/http-bind [P,L]
+
+RewriteRule ^/*donate/*$ https://alum.uvm.edu/foundation/giving/online/ [R=301,L]
+
 
 #this one is only temporary
 RewriteRule ^/*service/streamtitle/*$ http://bossanova.wruv.org/service/streamtitle [P,L] 

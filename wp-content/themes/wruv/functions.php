@@ -21,8 +21,8 @@ add_action('wp', function() {
 });
 
 add_action( 'after_setup_theme', function() {
-	// enable featured images for posts, pages, and underwiters.
-	add_theme_support( 'post-thumbnails', array( 'post', 'page', 'underwriter') );
+	// enable featured images for all post types.
+	add_theme_support( 'post-thumbnails' );
 } );
 
 /*** FUNCTIONS

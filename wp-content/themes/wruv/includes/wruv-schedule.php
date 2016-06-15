@@ -18,7 +18,7 @@ function wruv_current_sched_slot() {
 	*/
 
 
-		$metakeys = ['slot_end', 'show_name', 'show_dj_name', 'genre', 'dayslot', 'timeslot_start', 'timeslot_end' ];
+		$metakeys = ['slot_end', 'show_name', 'show_dj_name', 'genre', 'dayslot', 'timeslot_start', 'timeslot_end', 'year' ];
 		$joins = [];
 		$fields = [];
 		foreach( $metakeys as $k ) {
@@ -33,6 +33,7 @@ function wruv_current_sched_slot() {
 				" . implode("\n", $joins) . "
 			WHERE
 				mt_slot_end.meta_value > $current_hr
+				AND mt_year.meta_value = " . WRUV_SCHED_YEAR . "
 			ORDER BY slot_end+0
 			LIMIT 1
 		";
@@ -210,6 +211,11 @@ add_shortcode( 'weekly-schedule', function($atts) {
 					'value' => $dayslot,
 					'compare' => '='
 				),
+				array(
+					'key' => 'wruv_sched_year',
+					'value' => WRUV_SCHED_YEAR,
+					'compare' => '='
+				)
 			),
 			'meta_value_num' => true,
 			'meta_key' => 'wruv_sched_slot_end',

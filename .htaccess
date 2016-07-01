@@ -10,7 +10,7 @@ RewriteRule ^/*donate/*$ https://alum.uvm.edu/foundation/giving/online/ [R=301,L
 
 
 #this one is only temporary
-RewriteRule ^/*service/streamtitle/*$ http://bossanova.wruv.org/service/streamtitle [P,L] 
+#RewriteRule ^/*service/streamtitle/*$ http://bossanova.wruv.org/service/streamtitle [P,L] 
 
 # BEGIN WordPress
 <IfModule mod_rewrite.c>

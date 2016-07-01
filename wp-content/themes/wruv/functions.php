@@ -1,5 +1,7 @@
 <?php
+
 define('WRUV_SCHED_YEAR', 201601);  //this needs to be an option in the admin
+include_once( __DIR__ . '/includes/wruv-schedule.php' );
 
 add_action('parse_request', function($query) {
 	if( !isset($_SERVER["REDIRECT_URL"]) ) return;
@@ -14,13 +16,14 @@ add_action('parse_request', function($query) {
 		switch($request_parts[0]) {
 			case 'service':
 				if( isset($request_parts[1]) && $request_parts[1] == 'streamtitle' ) {
+					header('Content-Type: text/plain');
 					echo wruv_current_streamtitle();
+					exit;
 				}
-				exit;
 		}
 	}
 
-}
+});
 add_action( 'after_setup_theme', function() {
 	// enable featured images for all post types.
 	add_theme_support( 'post-thumbnails' );
@@ -351,5 +354,3 @@ function bbytes_likebox( $atts ) {
 	return ob_get_clean();
 }
 add_shortcode( 'bbytes-likebox', 'bbytes_likebox' );
-
-include_once( __DIR__ . '/includes/wruv-schedule.php' );

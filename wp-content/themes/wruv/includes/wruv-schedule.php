@@ -2,6 +2,9 @@
 
 date_default_timezone_set('America/New_York'); //this is totally fucked
 
+function wruv_current_streamtitle() {
+	echo '!';
+}
 
 function wruv_current_sched_slot() {
 	global $current_schedule_slot;

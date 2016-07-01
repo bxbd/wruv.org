@@ -1,26 +1,26 @@
 <?php
 define('WRUV_SCHED_YEAR', 201601);  //this needs to be an option in the admin
 
-add_action('wp', function() {
-	if( is_404() ) {
-		if( preg_match('/^\/fixgenre\//', $_SERVER["REQUEST_URI"] ) ) {
-			// echo preg_replace('/^\/invoice\/(.*)$/', 'client/invoices/$1', $_SERVER["REQUEST_URI"] );
-			header('Content-Type: text/plain');
-			$posts = get_posts( array(
-				'posts_per_page' => 5,
-				'offset' => 0,
-				'post_type' => 'reviews',
-			));
-			var_export($posts);
-			exit();
-		}
-		// echo '404!';
-		//~ wp_redirect( home_url() );
-		//~ exit();
-		return;
-	}
-});
+add_action('parse_request', function($query) {
+	if( !isset($_SERVER["REDIRECT_URL"]) ) return;
 
+	$request_parts = array_values(
+		// remove empty elements and reindex
+		array_filter(explode('/', $_SERVER["REDIRECT_URL"]), 'strlen')
+	);
+
+	$GLOBALS['REDIRECT_URL_PARTS'] = $request_parts;
+	if($request_parts && isset($request_parts[0])) {
+		switch($request_parts[0]) {
+			case 'service':
+				if( isset($request_parts[1]) && $request_parts[1] == 'streamtitle' ) {
+					echo wruv_current_streamtitle();
+				}
+				exit;
+		}
+	}
+
+}
 add_action( 'after_setup_theme', function() {
 	// enable featured images for all post types.
 	add_theme_support( 'post-thumbnails' );

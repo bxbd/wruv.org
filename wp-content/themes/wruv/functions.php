@@ -1,5 +1,6 @@
 <?php
-define('WRUV_SCHED_YEAR', 201601);  //this needs to be an option in the admin
+
+define('WRUV_SCHED_YEAR', time() >= 1466020800 ? 201602 : 201601 );  //this needs to be an option in the admin
 
 add_action('wp', function() {
 	if( is_404() ) {

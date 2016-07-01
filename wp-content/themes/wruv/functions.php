@@ -1,6 +1,6 @@
 <?php
 
-define('WRUV_SCHED_YEAR', 201601);  //this needs to be an option in the admin
+define('WRUV_SCHED_YEAR', time() >= 1466020800 ? 201602 : 201601 ); //this needs to be an option in the admin
 include_once( __DIR__ . '/includes/wruv-schedule.php' );
 
 add_action('parse_request', function($query) {

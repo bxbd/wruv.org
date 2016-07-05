@@ -2,6 +2,26 @@
 
 date_default_timezone_set('America/New_York'); //this is totally fucked
 
+function wruv_current_streamtitle() {
+	$onair = wruv_current_sched_slot();
+	if( !empty($onair['show_name']) && !empty($onair['show_dj_name']) ) {
+ 		?><?= $onair['show_name'] ?> with <?= $onair['show_dj_name'] ?><?php
+	}
+	elseif( empty($onair['show_name']) && !empty($onair['show_dj_name']) ) {
+ 		?><?= !empty($onair['genre']) ? $onair['genre'] . ' with ' : '' ?><?= $onair['show_dj_name'] ?><?php
+	}
+	elseif( !empty($onair['show_name']) && empty($onair['show_dj_name']) ) {
+		?><?= $onair['show_name'] ?><?= !empty($onair['genre']) ? ' featuring ' . $onair['genre'] : '' ?><?php
+	}
+	elseif( !empty($onair['genre']) ) {
+		?><?= $onair['genre'] ?><?php
+	}
+	//  if song
+	//  ( song.time | strftime("%l") | trim  song.time | strftime(':%m') | trim
+	//   ' ' _ song.artist if song.artist  ', ' if song.artist && song.track  '"' _ song.track _ '"' if song.track )
+
+ 	?>, till <?= word_time($onair['timeslot_end']) ?><?php
+}
 
 function wruv_current_sched_slot() {
 	global $current_schedule_slot;
@@ -149,6 +169,27 @@ function ampm($h) {
 	$h %= 24;
 	return date("ga", strtotime("$h:00"));
 }
+
+function word_time($t) {
+	if( $t == 12 ) return 'noon';
+
+	$t12 = $t % 12;
+		if($t12 == 0 ){ $ret =  'midnight'; }
+    elseif($t12 == 1) { $ret =  'one'; }
+    elseif($t12 == 2) { $ret =  'two'; }
+    elseif($t12 == 3) { $ret =  'three'; }
+    elseif($t12 == 4) { $ret =  'four'; }
+    elseif($t12 == 5) { $ret =  'five'; }
+    elseif($t12 == 6) { $ret =  'six'; }
+    elseif($t12 == 7) { $ret =  'seven'; }
+    elseif($t12 == 8) { $ret =  'eight'; }
+    elseif($t12 == 9) { $ret =  'nine'; }
+    elseif($t12 == 10) { $ret = 'ten'; }
+    elseif($t12 == 11) { $ret = 'eleven'; }
+
+    return $ret;
+}
+
 function sched_time_str($d, $hs, $he) {
 	$dayname = dow($d);
 

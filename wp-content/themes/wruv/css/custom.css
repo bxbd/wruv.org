@@ -95,5 +95,6 @@ ul, ol {
 	}
 
 }
-
-
+.wz-wrap.wz-hover > img {
+    max-height: 180px;
+}

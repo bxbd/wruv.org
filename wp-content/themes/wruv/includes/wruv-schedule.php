@@ -408,7 +408,109 @@ function register_schedule_slot_post_type() {
 		'map_meta_cap' => true, // Set to `false`, if users are not allowed to edit/delete existing posts
 	);
 	register_post_type( 'schedule_slot', $args );
+	//
+	// add_filter( 'manage_posts_columns' , function($columns) {
+	// 	return array_merge(
+	// 		$columns,
+	//         array(
+	// 			'publisher' => __('Publisher'),
+	//             'book_author' =>__( 'Book Author')
+	// 		)
+	// 	);
+	// }, 10, 2 );
+
+	if( is_admin() ){
+    	add_action('pre_get_posts', function($query) {
+			if( $query->get('post_type') == 'schedule_slot' ) {
+				if($query->get('orderby') == ''){
+					$query->set('meta_key', 'wruv_sched_slot_end');
+		            $query->set('orderby', 'meta_value_num');
+					$query->set('order', 'ASC');
+		        }
+
+				$query->set('meta_query', [[
+					'key' => 'wruv_sched_year',
+					'value' => WRUV_SCHED_YEAR,
+					'compare' => '='
+				]]);
+			}
+		});
+	}
+	/* todo:
+		add meta fields to quickedit
+		remove "trash" links in all places (quicklink, post edit, bulk actions)
+		custom sorting
+		links on values
+		search meta
+		(multiple?) filters on meta (especially year and day)
+		remove top nav links
+		post status fields
+		smaller/more rows per page?
+
+	*/
+	add_filter( 'manage_schedule_slot_posts_columns' , function($columns) {
+		// echo '<pre>' . $GLOBALS['wp_query']->request; exit;
+		$new_columns = array(
+	        // 'cb' => '<input type="checkbox" />',
+			'timeslot' => __('Slot', 'text_domain'),
+			'wruv_sched_show_name' => __('Show', 'text_domain'),
+			'wruv_sched_show_dj_name' => __('DJ', 'text_domain'),
+			'wruv_sched_genre' => __('Genre', 'text_domain'),
+			'wruv_sched_dj_actual_name' => __('Person', 'text_domain'),
+			'wruv_sched_dj_email' => __('Email', 'text_domain'),
+			// 'wruv_sched_year' => __('YEAR#', 'text_domain'),
+	    );
+		unset($columns['cb']);
+		unset($columns['title']);
+		unset($columns['author']);
+		unset($columns['comments']);
+		unset($columns['date']);
+
+		return $new_columns + $columns;
+
+	});
+	add_action( 'manage_schedule_slot_posts_custom_column' , function($column, $post_id) {
+		$v = get_post_meta( $post_id, $column, true);
+		if( strrpos($column, 'wruv_sched_timeslot_') === 0 ) {
+			echo '<pre>' . ampm($v) . '</pre>';
+		}
+		elseif( strrpos($column, 'wruv_sched_') === 0 ) {
+			echo $v;
+		}
+		elseif( $column == 'timeslot' ) {
+			$ts = get_post_meta( $post_id, 'wruv_sched_slot_end', true);
+			$d = get_post_meta( $post_id, 'wruv_sched_dayslot', true);
+			$start = get_post_meta( $post_id, 'wruv_sched_timeslot_start', true);
+			$end = get_post_meta( $post_id, 'wruv_sched_timeslot_end', true);
+			echo '<pre><b>' . dow($d) . "\n" . ampm($start) . '-' . ampm($end) . "<!--[@+$ts hrs]-->" . '</b></pre>';
+		}
+		// $new_columns = array(
+	    //     'cb' => '<input type="checkbox" />',
+		// 	'wruv_sched_dayslot' => __('DAY', 'text_domain'),
+		// 	'wruv_sched_timeslot_start' => __('from', 'text_domain'),
+		// 	'wruv_sched_timeslot_end' => __('to', 'text_domain'),
+		//
+		// 	'wruv_sched_show_name' => __('Show', 'text_domain'),
+		// 	'wruv_sched_show_dj_name' => __('DJ', 'text_domain'),
+		// 	'wruv_sched_genre' => __('Genre', 'text_domain'),
+		// 	'wruv_sched_dj_actual_name' => __('Person', 'text_domain'),
+		// 	'wruv_sched_dj_email' => __('Email', 'text_domain'),
+		// 	'wruv_sched_year' => __('YEAR#', 'text_domain'),
+	    // );
+		// unset($columns['cb']);
+		// unset($columns['title']);
+		// unset($columns['author']);
+		// unset($columns['comments']);
+		// unset($columns['date']);
+		//
+		// return $new_columns + $columns;
+
+	}, 10, 2 );
+
 }
+
+
+
 
 if( function_exists('register_tbd_import') ) {
 $tbd = register_tbd_import('wruv_schedule_noon-to-three', [

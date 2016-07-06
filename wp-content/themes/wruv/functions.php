@@ -17,9 +17,25 @@ add_action('parse_request', function($query) {
 			case 'service':
 				if( isset($request_parts[1]) && $request_parts[1] == 'streamtitle' ) {
 					header('Content-Type: text/plain');
-					echo wruv_current_streamtitle();
+
+					// if( isset($_GET['t']) ) {
+					// 	$d = new DateTime($_GET['t'], new DateTimeZone('America/New_York'));
+					// 	// var_export($d);
+					// 	$t = $d->format('U');
+					// }
+					// else {
+						$t = date('U');
+					// }
+					// echo "t=$t (" . date('c', $t) . ") [" . $_GET['t'] . "]\n";
+
+					echo wruv_streamtitle($t);
 					exit;
 				}
+				// elseif( isset($request_parts[1]) && $request_parts[1] == 'titles' ) {
+				// 	header('Content-Type: text/plain');
+				// 	echo query_wruv_sched($GET['t']);
+				// 	exit;
+				// }
 		}
 	}
 

@@ -2,8 +2,18 @@
 
 date_default_timezone_set('America/New_York'); //this is totally fucked
 
+
 function wruv_current_streamtitle() {
 	$onair = wruv_current_sched_slot();
+	return wruv_streamtitle_str( $onair );
+
+}
+function wruv_streamtitle($ts) { //if you want it for "now" use current, above
+	$onair = wruv_sched_slot($ts);
+	return wruv_streamtitle_str( $onair );
+
+}
+function wruv_streamtitle_str($onair) {
 	if( !empty($onair['show_name']) && !empty($onair['show_dj_name']) ) {
  		?><?= $onair['show_name'] ?> with <?= $onair['show_dj_name'] ?><?php
 	}
@@ -28,45 +38,53 @@ function wruv_current_sched_slot() {
 	if( empty($current_schedule_slot) ) {
 		date_default_timezone_set('America/New_York'); //this is totally fucked
 		// echo date('w') . ' ' . date('g');
-		$current_hr = (date('w') * 24) + date('G');
-		global $wpdb;
+		$current_schedule_slot = wruv_sched_slot(date('U'));
+	}
+	return $current_schedule_slot;
+}
 
-	/*
-		SELECT wp_posts.*, mt_slot_end.meta_value AS slot_end
-		FROM wp_posts
-			INNER JOIN wp_postmeta AS mt_slot_end ON ( wp_posts.ID = mt_slot_end.post_id  AND mt_slot_end.meta_key = 'wruv_sched_slot_end' )
-	*/
+function wruv_hour($date = null) {
+	return (date('w', $date) * 24) + date('G', $date);
+}
+
+function wruv_sched_slot($date) {
+	$query_hr = wruv_hour($date);
+
+	global $wpdb;
+
+/*
+	SELECT wp_posts.*, mt_slot_end.meta_value AS slot_end
+	FROM wp_posts
+		INNER JOIN wp_postmeta AS mt_slot_end ON ( wp_posts.ID = mt_slot_end.post_id  AND mt_slot_end.meta_key = 'wruv_sched_slot_end' )
+*/
 
 
-		$metakeys = ['slot_end', 'show_name', 'show_dj_name', 'genre', 'dayslot', 'timeslot_start', 'timeslot_end', 'year' ];
-		$joins = [];
-		$fields = [];
-		foreach( $metakeys as $k ) {
-			$_k = "wruv_sched_$k";
-			array_push($joins, "INNER JOIN wp_postmeta AS mt_$k ON ( wp_posts.ID = mt_$k.post_id  AND mt_$k.meta_key = '$_k' )");
-			array_push($fields, "mt_$k.meta_value AS $k");
-		}
-
-		$sched_slot_sql = "
-			SELECT wp_posts.post_title, " . implode(", ", $fields) . "
-			FROM wp_posts
-				" . implode("\n", $joins) . "
-			WHERE
-				mt_slot_end.meta_value > $current_hr
-				AND mt_year.meta_value = " . WRUV_SCHED_YEAR . "
-			ORDER BY slot_end+0
-			LIMIT 1
-		";
-
-		// echo "<pre>" . $sched_slot_sql . "</pre>";
-		$sched_slot = $wpdb->get_results($sched_slot_sql);
-		$ret = (array)$sched_slot[0];
-		$ret['show_time_str'] = sched_time_str($ret['dayslot'], $ret['timeslot_start'], $ret['timeslot_end']);
-
-		$current_schedule_slot = $ret;
+	$metakeys = ['slot_end', 'show_name', 'show_dj_name', 'genre', 'dayslot', 'timeslot_start', 'timeslot_end', 'year' ];
+	$joins = [];
+	$fields = [];
+	foreach( $metakeys as $k ) {
+		$_k = "wruv_sched_$k";
+		array_push($joins, "INNER JOIN wp_postmeta AS mt_$k ON ( wp_posts.ID = mt_$k.post_id  AND mt_$k.meta_key = '$_k' )");
+		array_push($fields, "mt_$k.meta_value AS $k");
 	}
 
-	return $current_schedule_slot;
+	$sched_slot_sql = "
+		SELECT wp_posts.post_title, " . implode(", ", $fields) . "
+		FROM wp_posts
+			" . implode("\n", $joins) . "
+		WHERE
+			mt_slot_end.meta_value > $query_hr
+			AND mt_year.meta_value = " . WRUV_SCHED_YEAR . "
+		ORDER BY slot_end+0
+		LIMIT 1
+	";
+
+	// echo "<pre>" . $sched_slot_sql . "</pre>";
+	$sched_slot = $wpdb->get_results($sched_slot_sql);
+	$ret = (array)$sched_slot[0];
+	$ret['show_time_str'] = sched_time_str($ret['dayslot'], $ret['timeslot_start'], $ret['timeslot_end']);
+
+	return $ret;
 }
 
 
@@ -392,6 +410,7 @@ function register_schedule_slot_post_type() {
 	register_post_type( 'schedule_slot', $args );
 }
 
+if( function_exists('register_tbd_import') ) {
 $tbd = register_tbd_import('wruv_schedule_noon-to-three', [
 	'post_type' => 'schedule_slot',
 
@@ -425,6 +444,7 @@ $tbd = register_tbd_import('wruv_schedule_noon-to-three', [
 
 	'sample' => 'wruv_schedule_sample',
 ]);
+}
 
 function sample_value($col) {
 	include_once( __DIR__ . '/hipster-ipsum.php');
